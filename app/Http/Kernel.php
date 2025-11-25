@@ -30,5 +30,6 @@ class Kernel extends HttpKernel
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'admin' => \App\Http\Middleware\EnsureAdmin::class,
         'auth.api' => \App\Http\Middleware\AuthenticateWithApiToken::class,
+        'is_admin' => \App\Http\Middleware\IsAdmin::class,
     ];
 }

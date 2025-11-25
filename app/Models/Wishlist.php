@@ -5,37 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pemesanan extends Model
+class Wishlist extends Model
 {
     use HasFactory;
 
-    protected $table = 'pemesanan';
-    protected $primaryKey = 'id_pemesanan';
+    protected $table = 'wishlists';
+    protected $primaryKey = 'id_wishlist';
     public $incrementing = true;
     public $timestamps = false;
 
-    protected $dates = [
-        'tgl_check_in',
-        'tgl_check_out',
-        'tgl_pemesanan',
-    ];
-
     protected $fillable = [
-        'kode_pemesanan',
         'id_user',
         'id_kamar',
-        'nama_pemesan',
-        'nik',
-        'nohp',
-        'tgl_check_in',
-        'tgl_check_out',
-        'total_malam',
-        'total_harga',
-        'pilihan_pembayaran',
-        'catatan',
-        'status_pemesanan',
-        'tgl_pemesanan',
+        'created_at',
     ];
+
+    protected $dates = ['created_at'];
 
     public function user()
     {

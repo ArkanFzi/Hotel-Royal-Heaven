@@ -1,190 +1,187 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin / Manajemen Kamar</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
+@if(auth()->check() && auth()->user()->isAdmin())
+    @extends('layouts.admin')
+    @section('page_title', 'Manajemen Kamar')
+    @section('page_subtitle', 'Kelola semua kamar di hotel Royal Heaven')
+@else
+    @extends('layouts.app')
+    @section('page_title', 'Daftar Kamar')
+@endif
 
-    <style>
-        /* CSS Sidebar */
-        .sidebar {
-            background-color: #ffb833; /* Warna kuning oranye */
-        }
-        .nav-item {
-            padding: 1rem 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            padding-left: 2rem;
-            transition: background-color 0.2s;
-            text-decoration: none; /* Pastikan link tidak bergaris bawah */
-            color: inherit;
-        }
-        /* Item 'Manajemen Kamar' adalah yang aktif */
-        .nav-item.active-manajemen {
-            background-color: #f7a817; 
-            border-right: 5px solid #fff; 
-        }
-        .nav-item:hover {
-            background-color: rgba(247, 168, 23, 0.9); /* Sedikit lebih gelap dari warna sidebar */
-        }
-        .logout-link {
-            padding: 1rem 0;
-            cursor: pointer;
-            display: block;
-            padding-left: 2rem;
-            color: #b91c1c; /* Warna merah */
-            font-weight: 600;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            margin-top: auto; /* Dorong ke bawah */
-        }
-        .logout-link:hover {
-            background-color: #f7a817; 
-            color: #fff;
-        }
-    </style>
-</head>
-<body class="bg-gray-50 flex h-screen">
+@section('content')
+    <!-- HERO SECTION (responsive) -->
+    <section class="relative w-full mb-12 overflow-hidden">
+        <!-- Diagonal yellow (responsive sizing) -->
+        <div class="absolute left-0 top-0 z-0 w-full lg:w-1/2 h-72 lg:h-full" style="clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%); background: #ffb833;"></div>
 
-    <div class="sidebar w-64 flex-shrink-0 text-gray-800 shadow-xl flex flex-col">
-        <div class="p-6 flex-grow">
-            <div class="flex flex-col items-center mb-10">
-                <div class="w-24 h-24 rounded-full bg-white border-4 border-gray-100 overflow-hidden shadow-lg mb-3">
-                    <img src="profilhotel.png" alt="Profile Picture" class="w-full h-full object-cover">
+        <div class="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch">
+            <!-- Text column -->
+            <div class="lg:w-1/2 w-full flex items-center">
+                <div class="px-6 py-12 lg:py-24 lg:px-16 relative z-10">
+                    <span class="block text-sm font-semibold text-gray-700 mb-2">The Ultimate Luxury Experience</span>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">Hotel for Every<br class="hidden sm:block">Moment Rich in Money</h1>
+                    <p class="text-base text-gray-700 mb-8 max-w-lg">A hotel that has been established for a long time and has a cool be used as a family vacation spot.</p>
+
+                    <a href="#about" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-3 rounded-full shadow-lg transition-colors text-base">
+                        Know More About Hotel
+                        <span class="ml-3 flex items-center justify-center w-8 h-8 rounded-full border-2 border-white bg-yellow-400">
+                            <svg class="w-4 h-4" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                        </span>
+                    </a>
                 </div>
-                <div class="text-lg font-semibold text-gray-800">Someone</div>
             </div>
 
-            <nav>
-                <a href="admin" class="nav-item hover:bg-opacity-90">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                    Dashboard
-                </a>
+            <!-- Image column -->
+            <div class="lg:w-1/2 w-full flex items-center justify-center p-6 relative">
+                <!-- white panel behind image for large screens -->
+                <div class="hidden lg:block absolute right-12 top-12 w-[560px] h-[400px] bg-white rounded-2xl shadow-2xl"></div>
 
-                <a href="kamar" class="nav-item active-manajemen">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M4 14V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2zM6 8h8v6H6V8z"></path></svg>
-                    Manajemen Kamar
-                </a>
-
-                <a href="pemesanan" class="nav-item hover:bg-opacity-90">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0v3a1 1 0 11-2 0v-3z" clip-rule="evenodd"></path></svg>
-                    Pemesanan
-                </a>
-
-                <a href="#" class="nav-item hover:bg-opacity-90">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.586 2.586a1 1 0 001.414-1.414L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                    Riwayat Pemesanan
-                </a>
-            </nav>
+                <div class="w-full lg:w-[560px] h-64 sm:h-80 lg:h-[400px] rounded-2xl overflow-hidden relative z-10">
+                    <img src="{{ asset('user/hotel-pool.jpg') }}" alt="Hotel Pool" class="w-full h-full object-cover">
+                </div>
+            </div>
         </div>
-        
-        <a href="#" class="logout-link" 
-           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h5a1 1 0 000-2H4V4h4a1 1 0 100-2H3zm13 9a1 1 0 00.293-.707l-3-3a1 1 0 00-1.414 1.414L13.586 11H9a1 1 0 100 2h4.586l-1.293 1.293a1 1 0 001.414 1.414l3-3A1 1 0 0016 12z" clip-rule="evenodd"></path></svg>
-            Logout
-        </a>
-        
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
-    </div>
-    
-    <div class="flex-grow p-8 overflow-y-auto">
+    </section>
 
-        <h1 class="text-xl font-light text-gray-600 mb-8 pb-4 border-b">
-            Admin / <span class="font-semibold text-gray-800">Manajemen Kamar</span>
-        </h1>
+    <!-- ABOUT SECTION -->
+    <section id="about" class="w-full max-w-6xl mx-auto py-12 px-6 flex flex-col lg:flex-row items-center gap-12">
+        <div class="lg:w-1/2">
+            <h2 class="text-2xl font-bold mb-4"><span class="text-yellow-500">A little</span> <span class="text-blue-900">about us</span></h2>
+            <p class="text-gray-700 mb-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        </div>
+        <div class="lg:w-1/2 grid grid-cols-2 gap-4">
+            <div class="bg-gray-200 rounded-xl h-24"></div>
+            <div class="bg-gray-200 rounded-xl h-24"></div>
+            <div class="bg-gray-200 rounded-xl h-24 col-span-2"></div>
+        </div>
+    </section>
 
-        <div class="mb-12">
-            
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-700">Daftar Kamar</h2>
-                <a href="#" class="flex items-center bg-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow-sm hover:bg-gray-400 transition-colors">
-                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                    Add Data Kamar
-                </a>
-            </div>
-            
-            @if(session('success'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <strong class="font-bold">Berhasil!</strong>
-                    <span class="block sm:inline">{{ session('success') }}</span>
+    <!-- POPULAR ROOMS SECTION -->
+    <section class="w-full max-w-6xl mx-auto py-12 px-6">
+        <h2 class="text-3xl font-bold text-center mb-10">Our Most <span class="text-yellow-500">Popular Rooms</span></h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach($kamars->take(3) as $kamar)
+                <div class="bg-white rounded-2xl shadow-xl border border-blue-900/10 overflow-hidden flex flex-col">
+                    <div class="h-48 bg-white flex items-center justify-center border-b border-blue-900/5">
+                        <img src="{{ asset('user/hotel-pool.jpg') }}" alt="Kamar {{ $kamar->nomor_kamar }}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-900 mb-2">Kamar {{ $kamar->nomor_kamar }}</h3>
+                            <p class="text-sm text-gray-600 mb-2">{{ $kamar->tipe->nama_tipe ?? '-' }}</p>
+                            <p class="text-xs text-gray-500 uppercase tracking-wide">Harga Per Malam</p>
+                            <p class="text-lg font-bold text-yellow-600">Rp{{ number_format($kamar->tipe->harga_dasar ?? 0, 0, ',', '.') }}</p>
+                        </div>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-900 text-white shadow">Popular</span>
+                            <a href="{{ route('pemesanan.create') }}?kamar={{ $kamar->id_kamar }}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-full transition-colors text-sm">Detail</a>
+                        </div>
+                    </div>
                 </div>
-            @endif
+            @endforeach
+        </div>
+    </section>
 
-            <div class="bg-white rounded-lg shadow-md overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomor</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach($kamars as $k)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $k->nomor_kamar }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $k->tipe->nama_tipe ?? '-' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Rp{{ number_format($k->tipe->harga_dasar ?? 0, 0, ',', '.') }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                @if($k->status_ketersediaan == 'Tersedia')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Tersedia</span>
-                                @elseif($k->status_ketersediaan == 'Dipakai')
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Dipakai</span>
-                                @else
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">{{ $k->status_ketersediaan }}</span>
+    <!-- SEARCH & FILTER + ALL ROOMS -->
+    <section class="w-full max-w-6xl mx-auto py-12 px-6">
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-blue-900 mb-4">Cari & Filter Kamar</h2>
+            <form method="GET" action="{{ route('kamar.index') }}" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Search by Type -->
+                    <div>
+                        <label for="type" class="block text-sm font-medium text-blue-900 mb-1">Tipe Kamar</label>
+                        <select name="type" id="type" class="w-full px-3 py-2 border border-blue-900/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900">
+                            <option value="">-- Semua Tipe --</option>
+                            @foreach($tipeKamars as $tipe)
+                                <option value="{{ $tipe->nama_tipe }}" @selected(request('type') == $tipe->nama_tipe)>
+                                    {{ $tipe->nama_tipe }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <!-- Filter Status -->
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-blue-900 mb-1">Status</label>
+                        <select name="status" id="status" class="w-full px-3 py-2 border border-blue-900/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900">
+                            <option value="">-- Semua Status --</option>
+                            <option value="available" @selected(request('status') == 'available')>Tersedia</option>
+                            <option value="booked" @selected(request('status') == 'booked')>Dipesan</option>
+                            <option value="maintenance" @selected(request('status') == 'maintenance')>Pemeliharaan</option>
+                        </select>
+                    </div>
+                    <!-- Min Price -->
+                    <div>
+                        <label for="price_min" class="block text-sm font-medium text-blue-900 mb-1">Harga Minimum</label>
+                        <input type="number" name="price_min" id="price_min" placeholder="Rp..." value="{{ request('price_min') }}" class="w-full px-3 py-2 border border-blue-900/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900">
+                    </div>
+                    <!-- Max Price -->
+                    <div>
+                        <label for="price_max" class="block text-sm font-medium text-blue-900 mb-1">Harga Maksimum</label>
+                        <input type="number" name="price_max" id="price_max" placeholder="Rp..." value="{{ request('price_max') }}" class="w-full px-3 py-2 border border-blue-900/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900">
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-4">
+                    <button type="submit" class="bg-blue-900 hover:bg-blue-800 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+                        Cari
+                    </button>
+                    <a href="{{ route('kamar.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-lg transition-colors">
+                        Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Kamar Grid -->
+        @if($kamars->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($kamars as $kamar)
+                    <div class="bg-white rounded-2xl shadow-xl border border-blue-900/10 overflow-hidden flex flex-col">
+                        <div class="h-48 bg-gradient-to-br from-blue-900 via-yellow-100 to-yellow-50 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-yellow-300" fill="currentColor" viewBox="0 0 20 20"><path d="M4 14V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2zM6 8h8v6H6V8z"></path></svg>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-blue-900 mb-2">Kamar {{ $kamar->nomor_kamar }}</h3>
+                                <p class="text-sm text-gray-600 mb-2">{{ $kamar->tipe->nama_tipe ?? '-' }}</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-wide">Harga Per Malam</p>
+                                <p class="text-lg font-bold text-yellow-600">Rp{{ number_format($kamar->tipe->harga_dasar ?? 0, 0, ',', '.') }}</p>
+                                @if($kamar->deskripsi)
+                                    <p class="text-sm text-gray-600 mt-2 line-clamp-2">{{ $kamar->deskripsi }}</p>
                                 @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                @auth
+                            </div>
+                            <div class="mt-4 flex gap-2">
+                                @if(auth()->check())
                                     @if(auth()->user()->isAdmin())
-                                        <a href="{{ route('kamar.edit', $k->id_kamar) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                                        <form method="POST" action="{{ route('kamar.destroy', $k->id_kamar) }}" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kamar ini?')">
-                                            @csrf 
+                                        <a href="{{ route('kamar.edit', $kamar) }}" class="flex-1 text-center bg-blue-900 hover:bg-blue-800 text-white py-2 rounded font-semibold transition-colors">Edit</a>
+                                        <form method="POST" action="{{ route('kamar.destroy', $kamar) }}" class="flex-1" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kamar ini?')">
+                                            @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                            <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded font-semibold transition-colors">Hapus</button>
                                         </form>
                                     @else
-                                        <a href="{{ route('pemesanan.create') }}" class="text-blue-600 hover:text-blue-900">Pesan</a>
+                                        @if($kamar->status_ketersediaan == 'available')
+                                            <a href="{{ route('pemesanan.create') }}?kamar={{ $kamar->id_kamar }}" class="flex-1 text-center bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded font-semibold transition-colors">Pesan Sekarang</a>
+                                        @else
+                                            <button disabled class="flex-1 text-center bg-gray-400 text-white py-2 rounded font-semibold cursor-not-allowed">Tidak Tersedia</button>
+                                        @endif
                                     @endif
                                 @else
-                                    <a href="{{ route('login') }}" class="text-gray-500 hover:text-gray-700">Login to book</a>
-                                @endauth
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                    <a href="{{ route('login') }}" class="flex-1 text-center bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded font-semibold transition-colors">Login untuk Pesan</a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-
-            <div class="mt-4">
-                {{-- Pastikan kamu punya pagination jika $kamars adalah instance Paginator --}}
-                {{ $kamars->links() }} 
+            <!-- Pagination -->
+            <div class="mt-8">
+                {{ $kamars->links() }}
             </div>
-        </div>
-
-        <hr class="border-gray-300 my-8">
-        
-        <div class="mb-12">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-700">Daftar Tipe Kamar</h2>
-                <a href="#" class="flex items-center bg-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow-sm hover:bg-gray-400 transition-colors">
-                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                    Add Tipe Kamar
-                </a>
+        @else
+            <div class="bg-white rounded-xl shadow-lg p-12 text-center">
+                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 14V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2zM6 8h8v6H6V8z"></path></svg>
+                <p class="text-gray-500 text-lg">Tidak ada kamar yang sesuai dengan kriteria pencarian</p>
             </div>
-            
-            <div class="bg-gray-200 p-6 h-56 rounded-lg shadow-md flex items-center justify-center text-gray-500">
-                Placeholder Tabel Tipe Kamar (di sini kamu akan menambahkan tabel Tipe Kamar)
-            </div>
-        </div>
-
-    </div>
-
-</body>
-</html>
+        @endif
+    </section>
+@endsection

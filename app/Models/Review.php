@@ -5,37 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pemesanan extends Model
+class Review extends Model
 {
     use HasFactory;
 
-    protected $table = 'pemesanan';
-    protected $primaryKey = 'id_pemesanan';
+    protected $table = 'reviews';
+    protected $primaryKey = 'id_review';
     public $incrementing = true;
     public $timestamps = false;
 
-    protected $dates = [
-        'tgl_check_in',
-        'tgl_check_out',
-        'tgl_pemesanan',
-    ];
-
     protected $fillable = [
-        'kode_pemesanan',
         'id_user',
         'id_kamar',
-        'nama_pemesan',
-        'nik',
-        'nohp',
-        'tgl_check_in',
-        'tgl_check_out',
-        'total_malam',
-        'total_harga',
-        'pilihan_pembayaran',
-        'catatan',
-        'status_pemesanan',
-        'tgl_pemesanan',
+        'rating',
+        'komentar',
+        'created_at',
     ];
+
+    protected $dates = ['created_at'];
 
     public function user()
     {

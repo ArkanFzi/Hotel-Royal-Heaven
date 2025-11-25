@@ -1,147 +1,163 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin / Dashboard</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
+@extends('layouts.admin')
 
-    <style>
-        /* CSS Tambahan untuk gradasi warna sidebar dan highlight */
-        .sidebar {
-            background-color: #ffb833; /* Warna kuning oranye dari gambar */
-        }
-        .nav-item {
-            padding: 1rem 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            padding-left: 2rem;
-            transition: background-color 0.2s;
-        }
-        .nav-item.active {
-            background-color: #f7a817; /* Warna sedikit lebih gelap dari sidebar */
-            border-right: 5px solid #fff; /* Garis putih penanda aktif */
-        }
-        /* Style tambahan untuk tombol logout */
-        /* Update CSS di bagian <style> */
+@section('page_title', 'Dashboard')
+@section('page_subtitle', 'Selamat datang di sistem manajemen hotel Royal Heaven')
 
-        .logout-link {
-            padding: 1rem 0;
-            cursor: pointer;
-            display: block;
-            padding-left: 2rem;
-            color: #b91c1c; /* Warna merah */
-            font-weight: 600;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            margin-top: auto; /* Dorong ke bawah */
-        }
-        .logout-link:hover {
-            background-color: #f7a817; 
-            color: #fff;
-        }
-    </style>
-</head>
-<body class="bg-gray-50 flex h-screen">
-
-    <div class="sidebar w-64 flex-shrink-0 text-white shadow-xl flex flex-col justify-between">
-        <div class="p-6">
-            <div class="flex flex-col items-center mb-10">
-                <div class="w-24 h-24 rounded-full bg-white border-4 border-gray-100 overflow-hidden shadow-lg mb-3">
-                    <img src="profilhotel.png" alt="Profile Picture" class="w-full h-full object-cover">
+@section('content')
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Card: Total Kamar -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M4 14V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2zM6 8h8v6H6V8z"></path></svg>
                 </div>
-                <div class="text-lg font-semibold text-gray-800">Someone</div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Kamar</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ $totalKamar ?? 0 }}</dd>
+                    </dl>
+                </div>
             </div>
-
-            <nav>
-                <a href="admin" class="nav-item active text-gray-800 hover:bg-opacity-90">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                    Dashboard
-                </a>
-
-                <a href="kamar" class="nav-item text-gray-800 hover:bg-opacity-90">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M4 14V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2zM6 8h8v6H6V8z"></path></svg>
-                    Manajemen Kamar
-                </a>
-
-                <a href="#" class="nav-item text-gray-800 hover:bg-opacity-90">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0v3a1 1 0 11-2 0v-3z" clip-rule="evenodd"></path></svg>
-                    Pemesanan
-                </a>
-
-                <a href="#" class="nav-item text-gray-800 hover:bg-opacity-90">
-                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.586 2.586a1 1 0 001.414-1.414L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                    Riwayat Pemesanan
-                </a>
-            </nav>
         </div>
-        
-       <a href="#" class="logout-link" 
-           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h5a1 1 0 000-2H4V4h4a1 1 0 100-2H3zm13 9a1 1 0 00.293-.707l-3-3a1 1 0 00-1.414 1.414L13.586 11H9a1 1 0 100 2h4.586l-1.293 1.293a1 1 0 001.414 1.414l3-3A1 1 0 0016 12z" clip-rule="evenodd"></path></svg>
-            Logout
-        </a>
-        
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
+
+        <!-- Card: Kamar Tersedia -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Kamar Tersedia</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ $kamarTersedia ?? 0 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card: Total Pemesanan -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0v3a1 1 0 11-2 0v-3z" clip-rule="evenodd"></path></svg>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Pemesanan</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ $totalPemesanan ?? 0 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card: Total Member -->
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10.5 1.5H5.75A2.25 2.25 0 003.5 3.75v12.5A2.25 2.25 0 005.75 18.5h8.5a2.25 2.25 0 002.25-2.25V6.5m-11-5v5m5.5-5v5M3.5 11h13"></path></svg>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Member</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ $totalMember ?? 0 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="flex-grow p-8 overflow-y-auto">
-
-        <h1 class="text-xl font-light text-gray-600 mb-8 pb-4 border-b">
-            Admin / <span class="font-semibold text-gray-800">Dashboard</span>
-        </h1>
-
-        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-            <h2 class="text-sm font-normal text-gray-500 mb-6">Total Pengunjung</h2>
+    <!-- Chart Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-lg font-semibold text-gray-800 mb-6">Statistik Pengunjung Bulanan</h2>
+        
+        <div class="flex items-end h-72">
+            <div class="w-8 flex flex-col justify-between h-full pr-2 text-xs text-gray-400 border-r border-gray-200">
+                <span>250</span>
+                <span>150</span>
+                <span>50</span>
+                <span>0</span>
+            </div>
             
-            <div class="flex items-end h-72">
+            <div class="flex flex-grow justify-around items-end h-full pl-4">
                 @php
                     $data = [
-                        'JAN' => 250, 'FEB' => 155, 'MAR' => 120, 'APR' => 85,
-                        'MAY' => 190, 'JUN' => 130, 'JUL' => 160
+                        'JAN' => 120, 'FEB' => 155, 'MAR' => 145, 'APR' => 185,
+                        'MAY' => 200, 'JUN' => 170, 'JUL' => 210
                     ];
-                    $max = 250; // Nilai maksimum untuk skala
+                    $max = 250;
                 @endphp
 
-                <div class="w-8 flex flex-col justify-between h-full pr-2 text-xs text-gray-400 border-r border-gray-200">
-                    <span>250</span>
-                    <span>150</span>
-                    <span>50</span>
-                    <span>0</span>
-                </div>
-                
-                <div class="flex flex-grow justify-around items-end h-full pl-4">
-                    @foreach ($data as $month => $value)
-                        @php
-                            // Hitung tinggi batang relatif terhadap nilai maksimum (max = 250)
-                            $height = ($value / $max) * 90; 
-                        @endphp
-                        <div class="flex flex-col items-center w-1/7">
-                            <div 
-                                class="w-10 bg-yellow-400 hover:bg-yellow-500 transition-all duration-300 rounded-t-sm" 
-                                style="height: {{ $height }}%;" 
-                                title="{{ $value }} Pengunjung"
-                            ></div>
-                            <div class="mt-2 text-xs text-gray-600">{{ $month }}</div>
-                        </div>
-                    @endforeach
-                </div>
+                @foreach ($data as $month => $value)
+                    @php
+                        $height = ($value / $max) * 90;
+                    @endphp
+                    <div class="flex flex-col items-center w-1/7">
+                        <div 
+                            class="w-10 bg-gradient-to-t from-yellow-500 to-yellow-300 hover:from-yellow-600 hover:to-yellow-400 transition-all duration-300 rounded-t-sm" 
+                            style="height: {{ $height }}%;" 
+                            title="{{ $value }} Pengunjung"
+                        ></div>
+                        <div class="mt-2 text-xs text-gray-600 font-medium">{{ $month }}</div>
+                    </div>
+                @endforeach
             </div>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            
-            <div class="bg-white p-6 rounded-lg shadow-md max-w-xs">
-                <h3 class="text-sm font-semibold text-gray-600 mb-2 p-2 bg-gray-200 rounded-sm">Total Pemesanan</h3>
-                <p class="text-5xl font-light text-gray-700 p-2">2780</p>
-            </div>
-            
-        </div>
-
     </div>
 
-</body>
-</html>
+    <!-- Recent Bookings -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-800">Pemesanan Terbaru</h2>
+        </div>
+        
+        @if($recentBookings && count($recentBookings) > 0)
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Pemesanan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kamar</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check-in</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach($recentBookings as $booking)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $booking->kode_pemesanan }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $booking->user->nama_lengkap ?? $booking->user->username }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $booking->kamar->nomor_kamar ?? '-' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @if($booking->tgl_check_in)
+                                        {{ \Carbon\Carbon::parse($booking->tgl_check_in)->format('d M Y') }}
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    @php
+                                        $status = strtolower($booking->status_pemesanan);
+                                        $statusClass = 'bg-gray-100 text-gray-800';
+                                        if (strpos($status, 'pending') !== false) {
+                                            $statusClass = 'bg-yellow-100 text-yellow-800';
+                                        } elseif (strpos($status, 'confirmed') !== false || strpos($status, 'completed') !== false) {
+                                            $statusClass = 'bg-green-100 text-green-800';
+                                        } elseif (strpos($status, 'cancelled') !== false) {
+                                            $statusClass = 'bg-red-100 text-red-800';
+                                        }
+                                    @endphp
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
+                                        {{ ucfirst($booking->status_pemesanan) }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="px-6 py-8 text-center text-gray-500">
+                <p>Belum ada pemesanan</p>
+            </div>
+        @endif
+    </div>
+@endsection
