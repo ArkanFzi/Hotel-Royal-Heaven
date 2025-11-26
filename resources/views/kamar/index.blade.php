@@ -17,7 +17,7 @@
                     <h2 class="text-xl font-semibold">{{ $room->nama_kamar }}</h2>
                     <p class="mt-2 text-gray-600">{{ $room->deskripsi }}</p>
                     <p class="mt-2 font-bold">Harga: Rp {{ number_format($room->harga, 0, ',', '.') }}</p>
-                    <a href="{{ route('pemesanan.create') }}" class="mt-4 inline-block px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">Pesan Sekarang</a>
+                    <a href="{{ route('member.pemesanan.create') }}" class="mt-4 inline-block px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">Pesan Sekarang</a>
                 </div>
             </div>
             @endforeach

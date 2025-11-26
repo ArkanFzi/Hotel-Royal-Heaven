@@ -20,10 +20,10 @@
         payButton.addEventListener('click', function () {
             snap.pay('{{ $snapToken }}', {
                 onSuccess: function(result){
-                    window.location.href = "{{ route('pemesanan.my') }}";
+                    window.location.href = "{{ route('member.pemesanan.my') }}";
                 },
                 onPending: function(result){
-                    window.location.href = "{{ route('pemesanan.my') }}";
+                    window.location.href = "{{ route('member.pemesanan.my') }}";
                 },
                 onError: function(result){
                     alert('Payment failed or canceled. Please try again.');

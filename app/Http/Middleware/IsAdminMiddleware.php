@@ -14,12 +14,16 @@ class IsAdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Pengecekan apakah pengguna sudah login DAN level-nya adalah 'admin'.
-        if (Auth::check() && Auth::user()->level === 'admin') { 
-            return $next($request);
+        // Cek apakah user sudah login
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
         }
 
-        // Jika tidak, tolak akses dan redirect ke halaman utama.
-        return redirect('/')->with('error', 'Akses Ditolak. Anda tidak memiliki izin Admin.');
+        // Cek apakah user adalah admin berdasarkan kolom 'level'
+        if (Auth::user()->level !== 'admin') {
+            return redirect('/')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
+        }
+
+        return $next($request);
     }
 }

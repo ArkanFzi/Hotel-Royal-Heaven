@@ -66,44 +66,93 @@
         </div>
     </div>
 
-    <!-- Recent Bookings -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-        <h3 class="text-lg font-semibold mb-4">Pemesanan Terbaru</h3>
-        <div class="overflow-x-auto">
-            <table class="min-w-full">
-                <thead class="bg-gray-50 border-b">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode Pemesanan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Pemesan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kamar</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Harga</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($recentBookings ?? [] as $booking)
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="px-6 py-4 text-sm">{{ $booking->kode_pemesanan }}</td>
-                            <td class="px-6 py-4 text-sm">{{ $booking->nama_pemesan }}</td>
-                            <td class="px-6 py-4 text-sm">{{ $booking->kamar->nomor_kamar ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm">
-                                <span class="px-3 py-1 rounded-full text-xs font-medium 
-                                    @if($booking->status_pemesanan == 'confirmed') bg-green-100 text-green-800
-                                    @elseif($booking->status_pemesanan == 'pending') bg-yellow-100 text-yellow-800
-                                    @elseif($booking->status_pemesanan == 'cancelled') bg-red-100 text-red-800
-                                    @else bg-gray-100 text-gray-800 @endif">
-                                    {{ ucfirst($booking->status_pemesanan) }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-sm font-medium">Rp {{ number_format($booking->total_harga, 0, ',', '.') }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Belum ada pemesanan</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+    <!-- Chart Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-lg font-semibold text-gray-800 mb-6">Statistik Pengunjung Bulanan</h2>
+        
+        <div class="flex items-end h-72">
+            <div class="w-8 flex flex-col justify-between h-full pr-2 text-xs text-gray-400 border-r border-gray-200">
+                <span>250</span>
+                <span>150</span>
+                <span>50</span>
+                <span>0</span>
+            </div>
+            
+            <div class="flex flex-grow justify-around items-end h-full pl-4">
+                @php
+                    $data = [
+                        'JAN' => 120, 'FEB' => 155, 'MAR' => 145, 'APR' => 185,
+                        'MAY' => 200, 'JUN' => 170, 'JUL' => 210
+                    ];
+                    $max = 250;
+                @endphp
+
+                @foreach ($data as $month => $value)
+                    @php
+                        $height = ($value / $max) * 90;
+                    @endphp
+                    <div class="flex flex-col items-center w-1/7">
+                        <div 
+                            class="w-10 bg-gradient-to-t from-yellow-500 to-yellow-300 hover:from-yellow-600 hover:to-yellow-400 transition-all duration-300 rounded-t-sm" 
+                            style="height: {{ $height }}%;" 
+                            title="{{ $value }} Pengunjung"
+                        ></div>
+                        <div class="mt-2 text-xs text-gray-600 font-medium">{{ $month }}</div>
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
+
+    
+        
+        @if($recentBookings && count($recentBookings) > 0)
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Pemesanan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kamar</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check-in</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach($recentBookings as $booking)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $booking->kode_pemesanan }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $booking->user->nama_lengkap ?? $booking->user->username }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $booking->kamar->nomor_kamar ?? '-' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @if($booking->tgl_check_in)
+                                        {{ \Carbon\Carbon::parse($booking->tgl_check_in)->format('d M Y') }}
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    @php
+                                        $status = strtolower($booking->status_pemesanan);
+                                        $statusClass = 'bg-gray-100 text-gray-800';
+                                        if (strpos($status, 'pending') !== false) {
+                                            $statusClass = 'bg-yellow-100 text-yellow-800';
+                                        } elseif (strpos($status, 'confirmed') !== false || strpos($status, 'completed') !== false) {
+                                            $statusClass = 'bg-green-100 text-green-800';
+                                        } elseif (strpos($status, 'cancelled') !== false) {
+                                            $statusClass = 'bg-red-100 text-red-800';
+                                        }
+                                    @endphp
+                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
+                                        {{ ucfirst($booking->status_pemesanan) }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            
+        @endif
+    </div>
+
 @endsection

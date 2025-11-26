@@ -103,7 +103,7 @@
                                     Lihat Detail
                                 </a>
                                 @if($booking->status_pemesanan == 'pending')
-                                    <form method="POST" action="{{ route('pemesanan.cancel', $booking) }}" onsubmit="return confirm('Batalkan pemesanan ini?')" class="flex-1">
+                                    <form method="POST" action="{{ route('member.pemesanan.cancel', $booking) }}" onsubmit="return confirm('Batalkan pemesanan ini?')" class="flex-1">
                                         @csrf
                                         @method('DELETE')
                                         <button 
@@ -138,7 +138,7 @@
                                         </div>
                                     @endif
 
-                                    <form action="{{ route('reviews.store') }}" method="POST" class="space-y-4">
+                                    <form action="{{ route('member.reviews.store') }}" method="POST" class="space-y-4">
                                         @csrf
                                         <input type="hidden" name="id_kamar" value="{{ $booking->id_kamar }}">
                                         
