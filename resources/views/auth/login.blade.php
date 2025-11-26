@@ -1,6 +1,11 @@
 @extends('layouts.auth')
 
 @section('content')
+    {{-- Prevent browser from caching this page --}}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <style>
         /* CSS Kustom untuk menampung Gambar Latar Belakang */
         .auth-bg-image {

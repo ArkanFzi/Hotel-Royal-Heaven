@@ -37,6 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\PreventCache::class,
         ],
 
         'api' => [
@@ -62,8 +63,9 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         
         // Target Class yang menyebabkan error
-        'is_admin' => \App\Http\Middleware\IsAdminMiddleware::class,
+        'is_admin' => \App\Http\Middleware\EnsureAdmin::class,
         
+        'no_cache' => \App\Http\Middleware\PreventCache::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
