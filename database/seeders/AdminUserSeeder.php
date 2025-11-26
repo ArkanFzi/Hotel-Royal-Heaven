@@ -14,7 +14,7 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         $email = env('ADMIN_EMAIL', 'admin@example.com');
-        $username = env('ADMIN_USERNAME', 'admin');
+        $username = env('ADMIN_USERNAME', 'arkan');
         $name = env('ADMIN_NAME', 'Administrator');
         $password = env('ADMIN_PASSWORD', 'password');
 

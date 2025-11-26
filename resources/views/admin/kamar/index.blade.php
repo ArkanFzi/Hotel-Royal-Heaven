@@ -12,7 +12,7 @@
     <section class="relative w-full mb-12 overflow-hidden">
         <!-- ...existing code... -->
     </section>
-
+<!index.blade.php folder kamar 
     <!-- GROUPED ROOMS BY TIPE -->
     <section class="w-full max-w-7xl mx-auto py-12 px-6">
         <h2 class="text-3xl font-bold text-center mb-10">Daftar <span class="text-yellow-500">Kamar</span> Berdasarkan Tipe</h2>

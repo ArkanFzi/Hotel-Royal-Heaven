@@ -28,21 +28,28 @@ Route::get('/about', function () {
 })->name('about');
 
 // Admin dashboard - protected by IsAdmin middleware
-Route::middleware(['auth', 'is_admin'])->group(function () {
-    Route::get('admin', [AdminMemberController::class, 'index'])->name('admin.index');
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return view('admin.index');
+    })->name('index');
     
-    Route::resource('kamar', KamarController::class)->except(['show']);
-    Route::get('pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
-    Route::post('pemesanan/{pemesanan}/status', [PemesananController::class, 'updateStatus'])->name('pemesanan.updateStatus');
+    // Kamar Management
+    Route::get('/kamar', [KamarController::class, 'adminIndex'])->name('kamar.index');
 
-    // Management Member routes for admin
-    Route::get('admin/members', [App\Http\Controllers\AdminMemberController::class, 'index'])->name('admin.members.index');
-    Route::get('admin/members/create', [App\Http\Controllers\AdminMemberController::class, 'create'])->name('admin.members.create');
-    Route::post('admin/members', [App\Http\Controllers\AdminMemberController::class, 'store'])->name('admin.members.store');
-    Route::get('admin/members/{member}/edit', [App\Http\Controllers\AdminMemberController::class, 'edit'])->name('admin.members.edit');
-    Route::put('admin/members/{member}', [App\Http\Controllers\AdminMemberController::class, 'update'])->name('admin.members.update');
-    Route::delete('admin/members/{member}', [App\Http\Controllers\AdminMemberController::class, 'destroy'])->name('admin.members.destroy');
+    // Pemesanan Management
+    Route::get('/pemesanan', [PemesananController::class, 'index'])->name('pemesanan.index');
+    Route::post('/pemesanan/{pemesanan}/status', [PemesananController::class, 'updateStatus'])->name('pemesanan.updateStatus');
+
+    // Member Management
+    Route::get('/members', [AdminMemberController::class, 'index'])->name('members.index');
+    Route::get('/members/create', [AdminMemberController::class, 'create'])->name('members.create');
+    Route::post('/members', [AdminMemberController::class, 'store'])->name('members.store');
+    Route::get('/members/{member}/edit', [AdminMemberController::class, 'edit'])->name('members.edit');
+    Route::put('/members/{member}', [AdminMemberController::class, 'update'])->name('members.update');
+    Route::delete('/members/{member}', [AdminMemberController::class, 'destroy'])->name('members.destroy');
 });
+
+Route::resource('kamar', KamarController::class);
 
 // Auth
 // Override register routes to prevent admin from registering

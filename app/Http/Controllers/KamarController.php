@@ -44,4 +44,15 @@ class KamarController extends Controller
     }
 
     // Tempatkan method resource lainnya (create, store, edit, update, destroy) di sini...
+
+    /**
+     * Tampilkan daftar kamar untuk halaman manajemen (Admin).
+     */
+    public function adminIndex(): View
+    {
+        $kamars = Kamar::with('tipeKamar')->paginate(10);
+        $tipeKamars = TipeKamar::all();
+        
+        return view('admin.kamar.index', compact('kamars', 'tipeKamars'));
+    }
 }

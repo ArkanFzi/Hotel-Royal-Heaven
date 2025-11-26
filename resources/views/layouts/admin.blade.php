@@ -67,12 +67,17 @@
                     Dashboard
                 </a>
 
-                <a href="{{ route('kamar.index') }}" class="nav-item @if(request()->routeIs('kamar.*')) active @endif">
+                <a href="{{ route('admin.kamar.index') }}" class="nav-item @if(request()->routeIs('admin.kamar.*')) active @endif">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M4 14V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2zM6 8h8v6H6V8z"></path></svg>
                     Manajemen Kamar
                 </a>
 
-                <a href="{{ route('pemesanan.index') }}" class="nav-item @if(request()->routeIs('pemesanan.*')) active @endif">
+                <a href="{{ route('admin.members.index') }}" class="nav-item @if(request()->routeIs('admin.members.*')) active @endif">
+                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zm-2 5a3 3 0 100-6 3 3 0 000 6zm5 3a3 3 0 100-6 3 3 0 000 6zm-2 5a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Manajemen Member
+                </a>
+
+                <a href="{{ route('admin.pemesanan.index') }}" class="nav-item @if(request()->routeIs('admin.pemesanan.*')) active @endif">
                     <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0v3a1 1 0 11-2 0v-3z" clip-rule="evenodd"></path></svg>
                     Pemesanan
                 </a>
