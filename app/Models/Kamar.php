@@ -19,6 +19,8 @@ class Kamar extends Model
         'id_tipe',
         'deskripsi',
         'status_ketersediaan',
+        'foto_kamar',
+        'foto_detail',
     ];
 
     public function tipe()

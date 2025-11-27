@@ -1,17 +1,13 @@
-# Review & Rating Feature Implementation
-
-## Current Status
-- [x] Review model and migration exist
-- [x] ReviewController store method implemented
-- [x] Basic routes configured
+# TODO: Fix Member Pemesanan Controller Routing Issues
 
 ## Pending Tasks
-- [x] Modify MemberKamarController to load reviews and calculate average ratings
-- [ ] Update member kamar index view to display star ratings and review counts
-- [ ] Create member kamar show view to display detailed reviews
-- [ ] Create AdminReviewController with index, show, and delete methods
-- [ ] Add admin review routes to web.php
-- [ ] Create admin review views (index and show)
-- [ ] Test review display in member views
-- [ ] Test admin review management functionality
-- [ ] Verify review submission works correctly
+- [x] Update routes/web.php to use Member\PemesananController for member pemesanan routes
+- [x] Rename index() to myBookings() in Member\PemesananController
+- [x] Add cancelBooking() method to Member\PemesananController
+- [x] Add $reviewedKamarIds variable to myBookings method
+- [x] Update redirect in store() to use correct route name (member.pemesanan.my)
+- [x] Add Review model import to Member\PemesananController
+
+## Followup Steps
+- [x] Test the member pemesanan functionality after changes
+- [x] Fix additional "Route [member.index] not defined" error

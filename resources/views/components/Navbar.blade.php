@@ -71,7 +71,6 @@
                     @elseif(auth()->user()->isAdmin())
                         {{-- Admin Navbar --}}
                         <a href="{{ route('admin.dashboard.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Dashboard</a>
-                        <a href="{{ route('kamar.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Manajemen Kamar</a>
                         <a href="{{ route('admin.pemesanan.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Manajemen Pemesanan</a>
                         <a href="{{ route('admin.members.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Statistik</a>
                         <a href="{{ route('admin.members.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Manajemen Member</a>

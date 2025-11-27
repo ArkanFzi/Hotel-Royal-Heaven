@@ -23,7 +23,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Nama</label>
-                                <p class="mt-1 text-sm text-gray-900">{{ $review->user->name }}</p>
+                                <p class="mt-1 text-sm text-gray-900">{{ $review->user->nama_lengkap }}</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700">Email</label>

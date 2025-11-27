@@ -66,41 +66,18 @@
         </div>
     </div>
 
-    <!-- Chart Section -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-lg font-semibold text-gray-800 mb-6">Statistik Pengunjung Bulanan</h2>
-        
-        <div class="flex items-end h-72">
-            <div class="w-8 flex flex-col justify-between h-full pr-2 text-xs text-gray-400 border-r border-gray-200">
-                <span>250</span>
-                <span>150</span>
-                <span>50</span>
-                <span>0</span>
-            </div>
-            
-            <div class="flex flex-grow justify-around items-end h-full pl-4">
-                @php
-                    $data = [
-                        'JAN' => 120, 'FEB' => 155, 'MAR' => 145, 'APR' => 185,
-                        'MAY' => 200, 'JUN' => 170, 'JUL' => 210
-                    ];
-                    $max = 250;
-                @endphp
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <!-- Monthly Bookings and Revenue Chart -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-6">Statistik Bulanan</h2>
+            <canvas id="monthlyChart" width="400" height="300"></canvas>
+        </div>
 
-                @foreach ($data as $month => $value)
-                    @php
-                        $height = ($value / $max) * 90;
-                    @endphp
-                    <div class="flex flex-col items-center w-1/7">
-                        <div 
-                            class="w-10 bg-gradient-to-t from-yellow-500 to-yellow-300 hover:from-yellow-600 hover:to-yellow-400 transition-all duration-300 rounded-t-sm" 
-                            style="height: {{ $height }}%;" 
-                            title="{{ $value }} Pengunjung"
-                        ></div>
-                        <div class="mt-2 text-xs text-gray-600 font-medium">{{ $month }}</div>
-                    </div>
-                @endforeach
-            </div>
+        <!-- Booking Status Distribution -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-6">Distribusi Status Pemesanan</h2>
+            <canvas id="statusChart" width="400" height="300"></canvas>
         </div>
     </div>
 

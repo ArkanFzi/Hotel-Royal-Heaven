@@ -16,7 +16,12 @@
                 Dashboard
             </a>
 
-            <a href="{{ route('kamar.index') }}" class="nav-item @if(request()->routeIs('kamar.*')) active @endif">
+            <a href="{{ route('admin.tipe-kamar.index') }}" class="nav-item @if(request()->routeIs('admin.tipe-kamar.*')) active @endif">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                Manajemen Tipe Kamar
+            </a>
+
+            <a href="{{ route('admin.kamar.index') }}" class="nav-item @if(request()->routeIs('admin.kamar.*')) active @endif">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M4 14V6a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2zM6 8h8v6H6V8z"></path></svg>
                 Manajemen Kamar
             </a>
@@ -30,6 +35,12 @@
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a2 2 0 012-2h8a2 2 0 012 2v2h-2V3H6v2H4V3zM4 7h12v9a2 2 0 01-2 2H6a2 2 0 01-2-2V7z"></path></svg>
                 Riwayat Pemesanan
             </a>
+
+            <a href="{{ route('admin.reviews.index') }}" class="nav-item @if(request()->routeIs('admin.reviews.*')) active @endif">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                Kelola Review
+            </a>
+
         </nav>
     </div>
 
