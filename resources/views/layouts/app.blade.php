@@ -82,9 +82,9 @@
                 <div>
                     <h4 class="text-lg font-bold mb-4">Navigasi</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Daftar Kamar</a></li>
-                        @if(auth()->check())
-                            <li><a href="{{ route('pemesanan.my') }}" class="hover:text-white transition">Pemesanan Saya</a></li>
+                        <li><a href="{{ route('kamar.index') }}" class="hover:text-white transition">Daftar Kamar</a></li>
+                        @if(Auth::check())
+                            <li><a href="{{ route('member.pemesanan.my') }}" class="hover:text-white transition">Pemesanan Saya</a></li>
                         @endif
                     </ul>
                 </div>

@@ -38,7 +38,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('home');
+        return redirect()->route('member.index');
     }
 
     public function showLogin()
@@ -55,12 +55,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))){
             $request->session()->regenerate();
-            // Redirect admins to admin dashboard, members to home
+            // Redirect admins to admin dashboard, members to member index
             $user = Auth::user();
             if ($user->isAdmin()) {
-                return redirect()->route('admin.index');
+                return redirect()->route('admin.dashboard.index');
             }
-            return redirect()->route('home');
+            return redirect()->route('login');
         }
 
         return back()->withErrors(['email' => 'The provided credentials do not match our records.']);
@@ -71,7 +71,8 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login');
+        
+        return redirect()->route('login')->with('success', 'Anda telah berhasil logout.');
     }
 
     // Forgot password: show form

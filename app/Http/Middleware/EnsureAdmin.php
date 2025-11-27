@@ -12,8 +12,9 @@ class EnsureAdmin
     {
         $user = Auth::user();
         if (!$user || !$user->isAdmin()) {
-            abort(403, 'Unauthorized.');
+            return redirect()->back()->with('error', 'Unauthorized access');
         }
+
         return $next($request);
     }
 }

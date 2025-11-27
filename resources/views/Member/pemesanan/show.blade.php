@@ -177,7 +177,7 @@
             <div class="bg-white rounded-lg shadow-md p-8 mb-6">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Kelola Pemesanan</h2>
                 
-                <form method="POST" action="{{ route('pemesanan.updateStatus', $pemesanan) }}" class="flex gap-3">
+                <form method="POST" action="{{ route('admin.pemesanan.updateStatus', $pemesanan) }}" class="flex gap-3">
                     @csrf
                     
                     <select 
@@ -200,11 +200,11 @@
         <!-- Back Button -->
         <div class="flex gap-3">
             @if(auth()->user()->isAdmin())
-                <a href="{{ route('pemesanan.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
+                <a href="{{ route('member.pemesanan.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
                     Kembali ke Daftar Pemesanan
                 </a>
             @else
-                <a href="{{ route('pemesanan.my') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
+                <a href="{{ route('member.pemesanan.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors text-center">
                     Kembali ke Pemesanan Saya
                 </a>
             @endif
