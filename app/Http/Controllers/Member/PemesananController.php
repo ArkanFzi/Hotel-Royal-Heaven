@@ -18,14 +18,19 @@ class PemesananController extends Controller
         return view('member.pemesanan.index', compact('pemesanan'));
     }
 
+    // Tambahan agar route 'pemesanan/my' tidak error
+    public function myBookings()
+    {
+        $user = Auth::user();
+        $pemesanan = $user->bookings()->with('kamar')->latest('tgl_pemesanan')->paginate(10);
+        return view('member.pemesanan.index', compact('pemesanan'));
+    }
+
     // Create pemesanan form
     public function create(Request $request)
     {
         $kamars = Kamar::with('tipe')->where('status_ketersediaan', 'available')->get();
-        
-        // If kamar ID is in query string, pre-select it
         $selectedKamarId = $request->query('kamar');
-        
         return view('member.pemesanan.create', compact('kamars', 'selectedKamarId'));
     }
 
@@ -51,7 +56,6 @@ class PemesananController extends Controller
         $total_malam = $tgl_check_out->diff($tgl_check_in)->days;
         $total_harga = $total_malam * ($kamar->tipe->harga_dasar ?? 0);
 
-        // Update user data dengan info pemesanan
         $user->update([
             'nik' => $data['nik'],
             'nohp' => $data['nohp'],
@@ -74,7 +78,6 @@ class PemesananController extends Controller
             'tgl_pemesanan' => now(),
         ]);
 
-        // Mark kamar as booked
         if ($kamar->status_ketersediaan == 'available') {
             $kamar->status_ketersediaan = 'booked';
             $kamar->save();

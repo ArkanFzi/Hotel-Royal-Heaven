@@ -1,11 +1,11 @@
 <section class="relative w-full min-h-[730px] flex items-stretch">
     <div class="relative flex-1 min-h-[600px] bg-gray-200">
-        <img src="{{ asset('user/GambarHeroSection.jpg') }}" alt="Hotel Pool" class="absolute inset-0 w-full h-full object-cover" />
+        <img src="{{ asset('user/lobbyhtl (1).jpg') }}" alt="Hotel Pool" class="absolute inset-0 w-full h-full object-cover" />
         <div class="absolute inset-0 bg-black bg-opacity-10"></div>
     </div>
 
     <div class="absolute left-0 top-0 bottom-0 w-3/3 lg:w-2/4 xl:w-1/1 z-20">
-        <div class="w-full h-full" style="background: #FFC83D; clip-path: polygon(0 0, 100% 0%, 70% 100%, 0% 100%);"></div>
+        <div class="w-full h-full" style="background: #FFC83D; clip-path: polygon(0 0, 100% 0%, 80% 100%, 0% 100%);"></div>
     </div>
 
     <div class="absolute left-0 top-0 bottom-0 w-3/5 lg:w-2/5 xl:w-1/3 z-30 flex items-center justify-start px-12 py-16">

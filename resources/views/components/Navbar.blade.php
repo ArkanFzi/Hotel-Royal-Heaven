@@ -58,7 +58,7 @@
                     
                     @if(!auth()->check())
                         {{-- Guest Navbar --}}
-                        <a href="{{ route('home') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Home</a>
+                        <a href="{{ route('home') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Dashboard</a>
                         <a href="{{ route('about') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">About Us</a>
                         <a href="{{ route('daftarkamar') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Data Kamar</a>
                     @elseif(auth()->user()->isAdmin())
@@ -70,10 +70,9 @@
                         <a href="{{ route('admin.members.index') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Manajemen Member</a>
                     @else
                         {{-- Member Navbar --}}
-                        <a href="{{ route('home') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Home</a>
+                        <a href="{{ route('home') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Dashboard</a>
                         <a href="{{ route('daftarkamar') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Daftar Kamar</a>
-                        <a href="{{ route('member.pemesanan.create') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Pemesanan Kamar</a>
-                        <a href="{{ route('member.pemesanan.my') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Riwayat Kamar</a>
+                        <a href="{{ route('member.pemesanan.my') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Riwayat</a>
                         <a href="{{ route('member.profile') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">Profil</a>
                         <a href="{{ route('about') }}" class="px-4 py-2 font-medium text-gray-900 hover:text-yellow-600 transition text-center">About Us</a>
                     @endif
