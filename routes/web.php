@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminMemberController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AuthController;
 
@@ -85,8 +84,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     // Tipe Kamar
     Route::resource('tipe-kamar', App\Http\Controllers\Admin\TipeKamarController::class, ['as' => 'admin']);
 
-    // Manajemen Member
-    Route::resource('members', AdminMemberController::class, ['as' => 'admin']);
+
     
     // Profile Admin
     Route::get('profile', [AdminProfileController::class, 'show'])->name('admin.profile');
@@ -108,7 +106,6 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'ensure_member'])-
     Route::get('kamar/{kamar}', [MemberKamarController::class, 'show'])->name('kamar.show');
 
     // Pemesanan: Menggunakan Member PemesananController
-    Route::get('pemesanan/create', [MemberPemesananController::class, 'create'])->name('pemesanan.create');
     Route::post('pemesanan', [MemberPemesananController::class, 'store'])->name('pemesanan.store');
     Route::get('pemesanan/my', [MemberPemesananController::class, 'myBookings'])->name('pemesanan.my');
     Route::get('pemesanan/{pemesanan}', [MemberPemesananController::class, 'show'])->name('pemesanan.show');
@@ -120,5 +117,6 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'ensure_member'])-
     
     // Profile Member
     Route::get('profile', [MemberProfileController::class, 'show'])->name('profile');
+    Route::get('profile/edit', [MemberProfileController::class, 'edit'])->name('profile.edit');
     Route::put('profile', [MemberProfileController::class, 'update'])->name('profile.update');
 });

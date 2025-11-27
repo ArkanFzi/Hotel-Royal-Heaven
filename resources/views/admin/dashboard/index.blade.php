@@ -67,69 +67,66 @@
     </div>
 
     <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-1 gap-6 mb-8">
         <!-- Monthly Bookings and Revenue Chart -->
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-lg font-semibold text-gray-800 mb-6">Statistik Bulanan</h2>
-            <canvas id="monthlyChart" width="400" height="300"></canvas>
-        </div>
-
-        <!-- Booking Status Distribution -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-6">Distribusi Status Pemesanan</h2>
-            <canvas id="statusChart" width="400" height="300"></canvas>
+            <canvas id="monthlyChart" width="400" height="100"></canvas>
         </div>
     </div>
 
-    
-        
-        @if($recentBookings && count($recentBookings) > 0)
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Pemesanan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kamar</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check-in</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach($recentBookings as $booking)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $booking->kode_pemesanan }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $booking->user->nama_lengkap ?? $booking->user->username }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $booking->kamar->nomor_kamar ?? '-' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    @if($booking->tgl_check_in)
-                                        {{ \Carbon\Carbon::parse($booking->tgl_check_in)->format('d M Y') }}
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    @php
-                                        $status = strtolower($booking->status_pemesanan);
-                                        $statusClass = 'bg-gray-100 text-gray-800';
-                                        if (strpos($status, 'pending') !== false) {
-                                            $statusClass = 'bg-yellow-100 text-yellow-800';
-                                        } elseif (strpos($status, 'confirmed') !== false || strpos($status, 'completed') !== false) {
-                                            $statusClass = 'bg-green-100 text-green-800';
-                                        } elseif (strpos($status, 'cancelled') !== false) {
-                                            $statusClass = 'bg-red-100 text-red-800';
-                                        }
-                                    @endphp
-                                    <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusClass }}">
-                                        {{ ucfirst($booking->status_pemesanan) }}
-                                    </span>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @else
-            
-        @endif
-    </div>
+@endsection
 
+@section('scripts')
+<script>
+    // Monthly Bookings and Revenue Chart
+    const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+    const monthlyChart = new Chart(ctxMonthly, {
+        type: 'line',
+        data: {
+            labels: @json($months),
+            datasets: [{
+                label: 'Bookings',
+                data: @json($monthlyBookings),
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                yAxisID: 'y',
+            }, {
+                label: 'Revenue',
+                data: @json($monthlyRevenue),
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                yAxisID: 'y1',
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Bookings'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Revenue'
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                }
+            }
+        }
+    });
+
+
+</script>
 @endsection

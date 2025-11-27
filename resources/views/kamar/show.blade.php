@@ -43,8 +43,44 @@
             <div class="lg:col-span-2 space-y-8">
                 <!-- Room Image Gallery -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div class="aspect-w-16 aspect-h-9">
-                        <img src="{{ asset('storage/' . $kamar->foto_kamar) }}" alt="{{ $kamar->nomor_kamar }}" class="w-full h-96 lg:h-[500px] object-cover">
+                    <div id="image-carousel" class="relative">
+                        <div class="aspect-w-16 aspect-h-9">
+                            @php
+                                $images = [];
+                                if ($kamar->foto_kamar) {
+                                    $images[] = $kamar->foto_kamar;
+                                }
+                                if ($kamar->foto_detail && is_array($kamar->foto_detail)) {
+                                    $images = array_merge($images, $kamar->foto_detail);
+                                }
+                            @endphp
+                            @foreach($images as $index => $image)
+                                <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}" data-slide="{{ $index }}">
+                                    <img src="{{ asset('storage/' . $image) }}" alt="{{ $kamar->nomor_kamar }} - Image {{ $index + 1 }}" class="w-full h-96 lg:h-[500px] object-cover">
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Carousel Indicators -->
+                        @if(count($images) > 1)
+                            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                                @for($i = 0; $i < count($images); $i++)
+                                    <button class="carousel-indicator w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition-all {{ $i === 0 ? 'bg-opacity-100' : '' }}" data-slide="{{ $i }}"></button>
+                                @endfor
+                            </div>
+
+                            <!-- Navigation Arrows -->
+                            <button class="carousel-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full transition-all">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <button class="carousel-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full transition-all">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        @endif
                     </div>
                 </div>
 
@@ -197,13 +233,14 @@
                     </div>
 
                     @if($kamar->status_ketersediaan === 'available')
-                        <a href="{{ route('member.pemesanan.create', ['kamar' => $kamar->id_kamar]) }}"
+                        <button
+                           onclick="openBookingModal()"
                            class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
                             </svg>
                             Pesan Sekarang
-                        </a>
+                        </button>
                     @else
                         <button disabled class="w-full bg-gray-300 text-gray-500 font-semibold py-4 px-6 rounded-lg cursor-not-allowed flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -240,5 +277,143 @@
             </div>
         </div>
     </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div id="modalBackdrop" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+            <!-- Modal panel -->
+            <div id="modalPanel" class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                            Form Pemesanan Kamar
+                        </h3>
+                        <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="max-h-96 overflow-y-auto">
+                        <livewire:booking-form :selectedKamarId="$kamar->id_kamar" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .carousel-slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .carousel-slide.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+
+    <script>
+        function openBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Event listeners
+        document.getElementById('closeModalBtn').addEventListener('click', closeBookingModal);
+        document.getElementById('modalBackdrop').addEventListener('click', closeBookingModal);
+
+        // Listen for booking success event
+        window.addEventListener('booking-success', function() {
+            closeBookingModal();
+        });
+
+        // Image Carousel Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.getElementById('image-carousel');
+            if (!carousel) return;
+
+            const slides = carousel.querySelectorAll('.carousel-slide');
+            const indicators = carousel.querySelectorAll('.carousel-indicator');
+            const prevBtn = carousel.querySelector('.carousel-prev');
+            const nextBtn = carousel.querySelector('.carousel-next');
+
+            if (slides.length <= 1) return;
+
+            let currentSlide = 0;
+            let autoSlideInterval;
+
+            function showSlide(index) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                indicators.forEach(indicator => indicator.classList.remove('bg-opacity-100'));
+
+                slides[index].classList.add('active');
+                indicators[index].classList.add('bg-opacity-100');
+                currentSlide = index;
+            }
+
+            function nextSlide() {
+                const nextIndex = (currentSlide + 1) % slides.length;
+                showSlide(nextIndex);
+            }
+
+            function prevSlide() {
+                const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(prevIndex);
+            }
+
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(nextSlide, 5000); // Auto slide every 5 seconds
+            }
+
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval);
+            }
+
+            // Event listeners for controls
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    prevSlide();
+                    stopAutoSlide();
+                    startAutoSlide();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    nextSlide();
+                    stopAutoSlide();
+                    startAutoSlide();
+                });
+            }
+
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', function() {
+                    showSlide(index);
+                    stopAutoSlide();
+                    startAutoSlide();
+                });
+            });
+
+            // Pause auto-slide on hover
+            carousel.addEventListener('mouseenter', stopAutoSlide);
+            carousel.addEventListener('mouseleave', startAutoSlide);
+
+            // Start auto-slide
+            startAutoSlide();
+        });
+    </script>
 </div>
 @endsection

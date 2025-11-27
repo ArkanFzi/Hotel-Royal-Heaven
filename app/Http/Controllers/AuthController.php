@@ -36,9 +36,7 @@ class AuthController extends Controller
             'role' => 'member',
         ]);
 
-        Auth::login($user);
-
-        return redirect()->route('member.index');
+        return redirect()->route('login')->with('success', 'Registration successful! Please login to continue.');
     }
 
     public function showLogin()

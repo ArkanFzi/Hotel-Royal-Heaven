@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Pemesanan::class, 'id_user', 'id');
     }
 
+    public function pemesanan()
+    {
+        return $this->hasMany(\App\Models\Pemesanan::class, 'id_user', 'id');
+    }
+
     public function reviews()
     {
         return $this->hasMany(Review::class, 'id_user', 'id');

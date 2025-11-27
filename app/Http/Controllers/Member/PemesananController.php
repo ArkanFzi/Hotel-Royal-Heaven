@@ -25,17 +25,6 @@ class PemesananController extends Controller
         return view('Member.pemesanan.my', compact('pemesanan', 'reviewedKamarIds'));
     }
 
-    // Create pemesanan form
-    public function create(Request $request)
-    {
-        $kamars = Kamar::with('tipe')->where('status_ketersediaan', 'available')->get();
-        
-        // If kamar ID is in query string, pre-select it
-        $selectedKamarId = $request->query('kamar');
-        
-        return view('member.pemesanan.create', compact('kamars', 'selectedKamarId'));
-    }
-
     // Store pemesanan
     public function store(Request $request)
     {

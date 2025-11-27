@@ -73,7 +73,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-900">Recent Bookings</h3>
-                <a href="{{ route('member.pemesanan.index') }}" class="text-sm text-blue-600 hover:text-blue-800">View All</a>
+                <a href="{{ route('member.pemesanan.my') }}" class="text-sm text-blue-600 hover:text-blue-800">View All</a>
             </div>
             @if($recentBookings->count() > 0)
                 <div class="space-y-4">
@@ -154,7 +154,7 @@
                 <h3 class="text-lg font-semibold text-gray-900 ml-3">Riwayat Pemesanan</h3>
             </div>
             <p class="text-gray-600 mb-4">Cek status dan detail riwayat pemesanan Anda</p>
-            <a href="{{ route('member.pemesanan.index') }}" class="inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            <a href="{{ route('member.pemesanan.my') }}" class="inline-block bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                 Lihat Riwayat
             </a>
         </div>

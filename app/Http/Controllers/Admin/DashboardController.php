@@ -14,8 +14,8 @@ class DashboardController extends Controller
         $totalKamar = Kamar::count();
         $kamarTersedia = Kamar::where('status_ketersediaan', 'available')->count();
         $totalPemesanan = Pemesanan::count();
-        $totalMember = User::where('level', 'member')->count();
-        $recentBookings = Pemesanan::with(['user', 'kamar'])->latest('tgl_pemesanan')->take(5)->get();
+        $totalMember = User::where('role', 'member')->count();
+
 
         // Monthly bookings data for the last 12 months
         $monthlyBookings = [];
@@ -48,7 +48,6 @@ class DashboardController extends Controller
             'kamarTersedia',
             'totalPemesanan',
             'totalMember',
-            'recentBookings',
             'monthlyBookings',
             'monthlyRevenue',
             'months',

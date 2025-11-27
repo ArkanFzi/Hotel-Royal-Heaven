@@ -7,7 +7,7 @@
                 </div>
             </div>
             <div class="text-lg font-semibold text-gray-800">{{ Auth::user()->nama_lengkap ?? Auth::user()->username }}</div>
-            <div class="text-xs text-gray-600 mt-1">{{ Auth::user()->level === 'admin' ? 'Administrator' : 'Member' }}</div>
+            <div class="text-xs text-gray-600 mt-1">{{ Auth::user()->role === 'admin' ? 'Administrator' : 'Member' }}</div>
         </div>
 
         <nav class="space-y-1">
@@ -28,11 +28,6 @@
 
             <a href="{{ route('admin.pemesanan.index') }}" class="nav-item @if(request()->routeIs('admin.pemesanan.*')) active @endif">
                 <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-8a1 1 0 112 0v3a1 1 0 11-2 0v-3z" clip-rule="evenodd"></path></svg>
-                Pemesanan
-            </a>
-
-            <a href="{{ route('admin.members.index') }}" class="nav-item @if(request()->routeIs('admin.members.*')) active @endif">
-                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a2 2 0 012-2h8a2 2 0 012 2v2h-2V3H6v2H4V3zM4 7h12v9a2 2 0 01-2 2H6a2 2 0 01-2-2V7z"></path></svg>
                 Riwayat Pemesanan
             </a>
 

@@ -113,6 +113,9 @@ class BookingForm extends Component
         $kamar->save();
 
         session()->flash('success', 'Pemesanan berhasil dibuat. Kode: ' . $pemesanan->kode_pemesanan);
+
+        // Emit event to close modal and redirect
+        $this->dispatch('booking-success');
         return redirect()->route('member.pemesanan.my');
     }
 

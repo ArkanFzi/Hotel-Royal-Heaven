@@ -1,14 +1,10 @@
-<header x-data="{ scrolled: false }" 
-        @scroll.window="scrolled = (window.pageYOffset > 20)"
-        class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 pointer-events-none"
-        :class="{ 'py-0': scrolled, 'py-4': !scrolled }">
+<header class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 pointer-events-none py-4">
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-auto">
         <div class="flex items-start justify-between gap-4">
             
             {{-- 1. LOGO SECTION (Left) --}}
-            <div class="relative z-50 transition-all duration-500 ease-in-out transform origin-top-left shrink-0"
-                 :class="{ 'scale-75 -translate-y-2': scrolled, 'scale-100 translate-y-0': !scrolled }">
+            <div class="relative z-50 transition-all duration-500 ease-in-out transform origin-top-left shrink-0 scale-100 translate-y-0">
                 <div class="bg-white rounded-b-[2.5rem] px-8 pb-6 pt-4 shadow-2xl flex flex-col items-center justify-center border-t-0 relative overflow-hidden group">
                     {{-- Decorative top line --}}
                     <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
@@ -25,25 +21,21 @@
             </div>
 
             {{-- 2. NAVIGATION SECTION (Center) --}}
-            <div class="pt-2 transition-all duration-500" :class="{ 'pt-1': scrolled, 'pt-2': !scrolled }">
-                 <nav class="bg-white rounded-full shadow-xl px-2 py-2 flex items-center gap-1 transition-all duration-500 border border-gray-100"
-                     :class="{ 'bg-white/95 backdrop-blur-md py-1.5': scrolled, 'py-2.5': !scrolled }">
+            <div class="pt-2 transition-all duration-500">
+                 <nav class="bg-white rounded-full shadow-xl px-2 py-2.5 flex items-center gap-1 transition-all duration-500 border border-gray-100">
                     <div class="flex items-center px-4 gap-1">
-                        <a href="{{ route('landing') }}" 
-                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 relative overflow-hidden group"
-                           :class="request()->routeIs('landing') || request()->routeIs('home') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                        <a href="{{ route('landing') }}"
+                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 relative overflow-hidden group {{ request()->routeIs('landing') || request()->routeIs('home') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50' }}">
                             Dashboard
                         </a>
-                        
-                        <a href="{{ route('daftarkamar') }}" 
-                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300"
-                           :class="request()->routeIs('daftarkamar*') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+
+                        <a href="{{ route('daftarkamar') }}"
+                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 {{ request()->routeIs('daftarkamar*') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50' }}">
                             Daftar Kamar
                         </a>
 
-                        <a href="{{ route('about') }}" 
-                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300"
-                           :class="request()->routeIs('about') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                        <a href="{{ route('about') }}"
+                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 {{ request()->routeIs('about') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50' }}">
                             About Us
                         </a>
                     </div>
@@ -51,20 +43,17 @@
             </div>
 
             {{-- 3. AUTH SECTION (Right) --}}
-            <div class="pt-2 transition-all duration-500" :class="{ 'pt-1': scrolled, 'pt-2': !scrolled }">
-                <div class="bg-white rounded-full shadow-xl px-2 py-2 flex items-center gap-2 transition-all duration-500 border border-gray-100"
-                     :class="{ 'bg-white/95 backdrop-blur-md py-1.5': scrolled, 'py-2.5': !scrolled }">
+            <div class="pt-2 transition-all duration-500">
+                <div class="bg-white rounded-full shadow-xl px-2 py-2.5 flex items-center gap-2 transition-all duration-500 border border-gray-100">
                     
                     @if(auth()->check())
                         @if(!auth()->user()->isAdmin())
-                            <a href="{{ route('member.profile') }}" 
-                               class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300"
-                               :class="request()->routeIs('member.profile') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                            <a href="{{ route('member.profile') }}"
+                               class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 {{ request()->routeIs('member.profile') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50' }}">
                                 Profile
                             </a>
-                            <a href="{{ route('member.pemesanan.my') }}" 
-                               class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300"
-                               :class="request()->routeIs('member.pemesanan.my') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50'">
+                            <a href="{{ route('member.pemesanan.my') }}"
+                               class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 {{ request()->routeIs('member.pemesanan.my') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50' }}">
                                 Riwayat
                             </a>
                             <form method="POST" action="{{ route('logout') }}" class="ml-2">
