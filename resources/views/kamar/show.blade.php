@@ -219,6 +219,97 @@
                             <p class="text-gray-400 text-sm">Jadilah yang pertama memberikan ulasan untuk kamar ini</p>
                         </div>
                     @endif
+
+                    <!-- Review Form -->
+                    @if($canReview)
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <h4 class="text-lg font-semibold text-gray-900 mb-4">Tulis Ulasan Anda</h4>
+
+                            @if(session('success'))
+                                <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            @if(session('error'))
+                                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+
+                            @if($errors->any())
+                                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+                                    <ul class="list-disc list-inside">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form action="{{ route('member.reviews.store') }}" method="POST" class="space-y-4">
+                                @csrf
+                                <input type="hidden" name="id_kamar" value="{{ $kamar->id_kamar }}">
+
+                                <!-- Rating Input -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
+                                    <div class="flex items-center space-x-1">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <input type="radio" id="rating-{{ $i }}" name="rating" value="{{ $i }}" class="sr-only peer" required>
+                                            <label for="rating-{{ $i }}" class="cursor-pointer text-gray-300 hover:text-yellow-400 peer-checked:text-yellow-400">
+                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                            </label>
+                                        @endfor
+                                    </div>
+                                </div>
+
+                                <!-- Comment Input -->
+                                <div>
+                                    <label for="komentar" class="block text-sm font-medium text-gray-700 mb-2">Komentar (Opsional)</label>
+                                    <textarea
+                                        id="komentar"
+                                        name="komentar"
+                                        rows="4"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 resize-none"
+                                        placeholder="Bagikan pengalaman Anda menginap di kamar ini..."
+                                        maxlength="1000"
+                                    ></textarea>
+                                    <p class="text-sm text-gray-500 mt-1">Maksimal 1000 karakter</p>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="flex justify-end">
+                                    <button
+                                        type="submit"
+                                        class="inline-flex items-center px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                                    >
+                                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                        </svg>
+                                        Kirim Ulasan
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @elseif(auth()->check() && auth()->user()->role === 'member')
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <div class="text-center py-4">
+                                <p class="text-gray-500 text-sm">Untuk memberikan ulasan, Anda harus sudah menyelesaikan pemesanan kamar ini terlebih dahulu.</p>
+                            </div>
+                        </div>
+                    @else
+                        <div class="border-t border-gray-200 pt-6 mt-6">
+                            <div class="text-center py-4">
+                                <p class="text-gray-500 text-sm">
+                                    <a href="{{ route('login') }}" class="text-yellow-600 hover:text-yellow-700 font-medium">Masuk</a>
+                                    untuk memberikan ulasan
+                                </p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -231,6 +322,28 @@
                         </div>
                         <div class="text-gray-600">per malam</div>
                     </div>
+
+                    @auth
+                        @if(auth()->user()->role === 'member')
+                            <button
+                                id="wishlist-btn"
+                                data-in-wishlist="{{ $inWishlist ? 'true' : 'false' }}"
+                                data-kamar-id="{{ $kamar->id_kamar }}"
+                                class="w-full {{ $inWishlist ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-500 hover:bg-gray-600' }} text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                <span id="wishlist-text">{{ $inWishlist ? 'Hapus dari Wishlist' : 'Tambah ke Wishlist' }}</span>
+                            </button>
+                        @endif
+                    @else
+                        <a href="{{ route('login') }}" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            Masuk untuk Tambah Wishlist
+                        </a>
+                    @endauth
 
                     @if($kamar->status_ketersediaan === 'available')
                         <button
@@ -411,9 +524,101 @@
             carousel.addEventListener('mouseenter', stopAutoSlide);
             carousel.addEventListener('mouseleave', startAutoSlide);
 
-            // Start auto-slide
-            startAutoSlide();
+        // Start auto-slide
+        startAutoSlide();
         });
+
+        // Wishlist functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const wishlistBtn = document.getElementById('wishlist-btn');
+            if (!wishlistBtn) return;
+
+            wishlistBtn.addEventListener('click', function() {
+                const kamarId = this.getAttribute('data-kamar-id');
+                const inWishlist = this.getAttribute('data-in-wishlist') === 'true';
+
+                // Disable button during request
+                this.disabled = true;
+                this.innerHTML = '<svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Loading...';
+
+                const url = inWishlist ? `{{ route('member.wishlist.destroy', ':id') }}`.replace(':id', kamarId) : `{{ route('member.wishlist.store') }}`;
+
+                fetch(url, {
+                    method: inWishlist ? 'DELETE' : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: inWishlist ? null : JSON.stringify({
+                        id_kamar: kamarId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const newInWishlist = !inWishlist;
+                        this.setAttribute('data-in-wishlist', newInWishlist ? 'true' : 'false');
+                        this.className = `w-full ${newInWishlist ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-500 hover:bg-gray-600'} text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4`;
+                        this.innerHTML = `
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            <span id="wishlist-text">${newInWishlist ? 'Hapus dari Wishlist' : 'Tambah ke Wishlist'}</span>
+                        `;
+
+                        // Show success message
+                        showNotification(data.message, 'success');
+                    } else {
+                        showNotification(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
+                })
+                .finally(() => {
+                    // Re-enable button
+                    wishlistBtn.disabled = false;
+                    const currentInWishlist = wishlistBtn.getAttribute('data-in-wishlist') === 'true';
+                    wishlistBtn.innerHTML = `
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span id="wishlist-text">${currentInWishlist ? 'Hapus dari Wishlist' : 'Tambah ke Wishlist'}</span>
+                    `;
+                });
+            });
+        });
+
+        function showNotification(message, type) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
+            notification.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
+            notification.textContent = message;
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
     </script>
 </div>
 @endsection
