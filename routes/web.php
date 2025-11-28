@@ -38,6 +38,9 @@ Route::get('/daftarkamar/{kamar}', [MemberKamarController::class, 'show'])->name
 // About
 Route::get('/about', fn() => view('about'))->name('about');
 
+// Contact Us
+Route::get('/contact', fn() => view('contact'))->name('contact');
+
 
 // Midtrans payment notification webhook endpoint
 Route::post('/midtrans/notification', [AdminPemesananController::class, 'midtransNotification'])->name('midtrans.notification');

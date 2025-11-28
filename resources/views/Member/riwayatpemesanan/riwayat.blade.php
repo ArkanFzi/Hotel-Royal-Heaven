@@ -19,7 +19,7 @@
                 <input type="text" placeholder="Search by guest name..." class="w-full outline-none text-sm"
                     value="{{ request('search') }}">
             </div>
-
+         
             {{-- Tabs --}}
             <div class="grid grid-cols-4 text-center text-sm font-medium bg-[#F8F5EE] rounded-lg overflow-hidden">
                 <button class="py-2 bg-[#FFC83D] text-black">All Order History</button>

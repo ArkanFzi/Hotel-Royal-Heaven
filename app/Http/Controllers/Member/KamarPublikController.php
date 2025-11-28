@@ -70,6 +70,6 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
                 ->exists();
         }
 
-        return view('kamar.show', compact('kamar', 'reviews', 'averageRating', 'totalReviews', 'canReview', 'inWishlist'));
+        return view('kamar.show', compact('kamar', 'reviews', 'averageRating', 'totalReviews', 'canReview', 'inWishlist'))->with('hideNavbar', true);
     }
 }
