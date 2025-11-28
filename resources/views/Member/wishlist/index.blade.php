@@ -3,26 +3,115 @@
 @section('page_title', 'Wishlist Saya')
 
 @section('content')
-<div class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <div class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="text-center">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Wishlist Saya</h1>
-                <p class="text-gray-600">Kamar favorit yang Anda simpan untuk kunjungan selanjutnya</p>
-                @if($wishlists->count() > 0)
-                    <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 mt-4">
-                        <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                        </svg>
-                        {{ $wishlists->total() }} kamar di wishlist
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
+{{-- Hero Section --}}
+<x-hero-wishlist
+    :wishlists="$wishlists"
+    title="Your Favorite Rooms"
+    subtitle="Personal Collection"
+    description="Keep track of your favorite rooms and plan your perfect stay with ease."
+    image="user/interiorkamar.jpg"
+    ctaText="Explore More Rooms"
+    :ctaLink="route('member.kamar.index')"
+/>
 
+<div class="min-h-screen bg-gray-50 -mt-24 relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {{-- Search and Filter Section --}}
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <form method="GET" action="{{ route('member.wishlist.index') }}" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {{-- Search Input --}}
+                    <div class="lg:col-span-2">
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari Kamar</label>
+                        <div class="relative">
+                            <input type="text" name="search" id="search" value="{{ request('search') }}"
+                                   placeholder="Cari berdasarkan nomor kamar atau tipe..."
+                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Room Type Filter --}}
+                    <div>
+                        <label for="tipe_kamar" class="block text-sm font-medium text-gray-700 mb-2">Tipe Kamar</label>
+                        <select name="tipe_kamar" id="tipe_kamar"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                            <option value="">Semua Tipe</option>
+                            @foreach($tipeKamarOptions as $tipe)
+                                <option value="{{ $tipe->id_tipe }}" {{ request('tipe_kamar') == $tipe->id_tipe ? 'selected' : '' }}>
+                                    {{ $tipe->nama_tipe }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Availability Filter --}}
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status Ketersediaan</label>
+                        <select name="status" id="status"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                            <option value="">Semua Status</option>
+                            <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>Tersedia</option>
+                            <option value="unavailable" {{ request('status') == 'unavailable' ? 'selected' : '' }}>Tidak Tersedia</option>
+                        </select>
+                    </div>
+                </div>
+
+                {{-- Price Range and Sort --}}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="harga_min" class="block text-sm font-medium text-gray-700 mb-2">Harga Minimum</label>
+                        <input type="number" name="harga_min" id="harga_min" value="{{ request('harga_min') }}"
+                               placeholder="Rp 0"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="harga_max" class="block text-sm font-medium text-gray-700 mb-2">Harga Maksimum</label>
+                        <input type="number" name="harga_max" id="harga_max" value="{{ request('harga_max') }}"
+                               placeholder="Rp 9999999"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label for="sort" class="block text-sm font-medium text-gray-700 mb-2">Urutkan</label>
+                        <select name="sort" id="sort"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent">
+                            <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Nama Kamar (A-Z)</option>
+                            <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Harga Terendah</option>
+                            <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Harga Tertinggi</option>
+                        </select>
+                    </div>
+                </div>
+
+                {{-- Action Buttons --}}
+                <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-200">
+                    <button type="submit"
+                            class="inline-flex items-center px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Cari & Filter
+                    </button>
+                    <a href="{{ route('member.wishlist.index') }}"
+                       class="inline-flex items-center px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        Reset Filter
+                    </a>
+                    @if(request()->hasAny(['search', 'tipe_kamar', 'status', 'harga_min', 'harga_max', 'sort']))
+                        <div class="text-sm text-gray-600 flex items-center">
+                            <span>{{ $wishlists->total() }} hasil ditemukan</span>
+                        </div>
+                    @endif
+                </div>
+            </form>
+        </div>
+
         @if($wishlists->count() > 0)
             <!-- Wishlist Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -96,7 +185,7 @@
 
                             <!-- Action Buttons -->
                             <div class="flex space-x-2">
-                                <a href="{{ route('kamar.show', $wishlist->kamar->id_kamar) }}"
+                                <a href="{{ route('member.kamar.show', $wishlist->kamar->id_kamar) }}"
                                    class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-center text-sm">
                                     Lihat Detail
                                 </a>

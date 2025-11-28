@@ -97,15 +97,15 @@
                     {{-- Action Buttons --}}
                     <div class="flex space-x-4">
                         {{-- Detail Button (Styling: bg-gray-100, border, shadow-inner) --}}
-                        <a href="#" class="flex-1 text-center px-4 py-3 rounded-xl text-gray-700 bg-gray-100 border border-gray-300 hover:bg-gray-200 transition font-semibold shadow-inner">
+                        <a href="{{ route('member.kamar.show', $kamar) }}" class="flex-1 text-center px-4 py-3 rounded-xl text-gray-700 bg-gray-100 border border-gray-300 hover:bg-gray-200 transition font-semibold shadow-inner">
                             Detail
                         </a>
 
-                        {{-- Booking Button (Styling: bg-yellow-600, shadow-lg shadow-yellow-500/50, hover:-translate-y-0.5) --}}
+                        {{-- Book Now Button (Styling: bg-yellow-600, shadow-lg shadow-yellow-500/50, hover:-translate-y-0.5) --}}
                         @if(($kamar->status_ketersediaan ?? 'booked') == 'available')
                             <button onclick="openBookingModal({{ $kamar->id_kamar }})"
                                class="flex-1 text-center px-4 py-3 rounded-xl bg-yellow-600 text-white shadow-lg shadow-yellow-500/50 hover:bg-yellow-700 transition font-semibold transform hover:-translate-y-0.5">
-                                Booking
+                                Book Now
                             </button>
                         @else
                             {{-- Booked Button (Disabled) --}}

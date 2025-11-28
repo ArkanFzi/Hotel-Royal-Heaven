@@ -12,7 +12,9 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        return view('member.profile.show', compact('user'));
+        $currentActivities = $user->pemesanan()->whereIn('status_pemesanan', ['confirmed', 'checked_in'])->latest()->take(5)->get();
+        $activityHistory = $user->pemesanan()->whereIn('status_pemesanan', ['completed', 'cancelled'])->latest()->take(10)->get();
+        return view('member.profile.show', compact('user', 'currentActivities', 'activityHistory'));
     }
 
     // Edit member profile
@@ -26,14 +28,32 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
-        
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
             'nohp' => 'nullable|string|max:15',
             'nik' => 'nullable|string|max:20',
             'password' => 'nullable|min:8|confirmed',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240', // 10MB max
         ]);
+
+        // Map 'name' to 'nama_lengkap' for database storage
+        $data['nama_lengkap'] = $data['name'];
+        unset($data['name']);
+
+        // Handle profile photo upload
+        if ($request->hasFile('profile_photo')) {
+            // Delete old profile photo if exists
+            if ($user->profile_photo && \Storage::disk('public')->exists($user->profile_photo)) {
+                \Storage::disk('public')->delete($user->profile_photo);
+            }
+
+            // Store new profile photo
+            $fileName = time() . '_' . $user->id . '.' . $request->file('profile_photo')->getClientOriginalExtension();
+            $path = $request->file('profile_photo')->storeAs('profile-photos', $fileName, 'public');
+            $data['profile_photo'] = $path;
+        }
 
         // Remove password if not provided
         if (empty($data['password'])) {
@@ -43,6 +63,6 @@ class ProfileController extends Controller
         }
 
         $user->update($data);
-        return redirect()->route('member.profile.show')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('member.profile')->with('success', 'Profil berhasil diperbarui.');
     }
 }

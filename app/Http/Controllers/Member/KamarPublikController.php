@@ -28,10 +28,17 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
     }
 
     /**
-     * Tampilkan daftar semua kamar (Public Route: /daftarkamar).
+     * Tampilkan daftar semua kamar (Public Route: /daftarkamar, Member Route: /member/kamar).
      */
     public function index(Request $request): View
     {
+        $kamars = Kamar::with('tipe')->paginate(12);
+
+        // Check if this is member route
+        if ($request->is('member/kamar')) {
+            return view('Member.kamar.index', compact('kamars'));
+        }
+
         return view('kamar.index');
     }
 

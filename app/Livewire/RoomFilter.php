@@ -60,7 +60,7 @@ class RoomFilter extends Component
             });
         }
 
-        $kamars = $query->paginate(9);
+        $kamars = $query->paginate(6);
         $tipeKamars = TipeKamar::all();
 
         return view('livewire.room-filter', [

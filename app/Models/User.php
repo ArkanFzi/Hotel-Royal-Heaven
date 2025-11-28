@@ -26,6 +26,7 @@ class User extends Authenticatable
         'nik',
         'role',
         'api_token',
+        'profile_photo',
     ];
 
     /**

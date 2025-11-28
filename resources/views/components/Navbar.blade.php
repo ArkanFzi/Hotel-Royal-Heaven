@@ -38,8 +38,8 @@
                             Dashboard
                         </a>
 
-                        <a href="{{ route('daftarkamar') }}"
-                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 {{ request()->routeIs('daftarkamar*') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50' }}">
+                        <a href="{{ auth()->check() ? route('member.kamar.index') : route('daftarkamar') }}"
+                           class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 {{ request()->routeIs('member.kamar*') || request()->routeIs('daftarkamar*') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50' }}">
                             Daftar Kamar
                         </a>
 
@@ -105,7 +105,7 @@
             <a href="{{ route('landing') }}" class="text-lg font-medium text-gray-800 hover:text-yellow-600 transition-colors {{ request()->routeIs('landing') || request()->routeIs('home') ? 'text-yellow-600' : '' }}">
                 Dashboard
             </a>
-            <a href="{{ route('daftarkamar') }}" class="text-lg font-medium text-gray-800 hover:text-yellow-600 transition-colors {{ request()->routeIs('daftarkamar*') ? 'text-yellow-600' : '' }}">
+            <a href="{{ auth()->check() ? route('member.kamar.index') : route('daftarkamar') }}" class="text-lg font-medium text-gray-800 hover:text-yellow-600 transition-colors {{ request()->routeIs('member.kamar*') || request()->routeIs('daftarkamar*') ? 'text-yellow-600' : '' }}">
                 Daftar Kamar
             </a>
             <a href="{{ route('about') }}" class="text-lg font-medium text-gray-800 hover:text-yellow-600 transition-colors {{ request()->routeIs('about') ? 'text-yellow-600' : '' }}">
