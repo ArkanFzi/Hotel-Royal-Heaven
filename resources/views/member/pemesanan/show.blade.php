@@ -3,8 +3,9 @@
 @section('page_title', 'Detail Pemesanan')
 
 @section('content')
-    <div class="max-w-4xl mx-auto">
-        <!-- Header -->
+    <div class="min-h-screen bg-gray-50 pt-24">
+        <div class="max-w-4xl mx-2">
+
         <div class="bg-white rounded-lg shadow-md p-8 mb-6">
             <div class="flex justify-between items-start mb-6">
                 <div>

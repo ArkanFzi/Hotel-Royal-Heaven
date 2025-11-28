@@ -5,9 +5,9 @@
     'image' => 'user/kmrbnt5 (1).jpg',
     'ctaText' => 'Know More About Hotel',
     'ctaLink' => '#',
-    'splitPercent' => 50, // Default split at 50% width
-    'angle' => 105, // Default angle
-    'bgHex' => '#E3A008' // Default to gold-500 from palette
+    'splitPercent' => 50, 
+    'angle' => 105, 
+    'bgHex' => '#E3A008' 
 ])
 
 <section class="relative w-full min-h-[600px] lg:h-screen flex items-center overflow-hidden bg-gray-900">

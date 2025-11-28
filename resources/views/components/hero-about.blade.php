@@ -5,7 +5,7 @@
     </div>
 
     <div class="absolute left-0 top-0 bottom-0 w-3/3 lg:w-2/4 xl:w-1/1 z-20">
-        <div class="w-full h-full" style="background: #FFC83D; clip-path: polygon(0 0, 100% 0%, 80% 100%, 0% 100%);"></div>
+        <div class="w-full h-full" style="background: #FFC83D; clip-path: polygon(0 80, 100% 0%, 80% 100%, 0% 100%);"></div>
     </div>
 
     <div class="absolute left-0 top-0 bottom-0 w-3/5 lg:w-2/5 xl:w-1/3 z-30 flex items-center justify-start px-12 py-16">
