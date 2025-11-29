@@ -27,7 +27,7 @@ karena sudah ada di 'layouts.app' --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('member.kamar.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
+                    <a href="{{ route('daftarkamar') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
@@ -364,14 +364,32 @@ karena sudah ada di 'layouts.app' --}}
                     @endauth
 
                     @if($kamar->status_ketersediaan === 'available')
-                        <button
-                           onclick="openBookingModal()"
-                           class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
-                            </svg>
-                            Pesan Sekarang
-                        </button>
+                        @auth
+                            @if(auth()->user()->role === 'member')
+                                <button
+                                   onclick="openBookingModal()"
+                                   class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
+                                    </svg>
+                                    Pesan Sekarang
+                                </button>
+                            @else
+                                <a href="{{ route('login') }}" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
+                                    </svg>
+                                    Pesan Sekarang
+                                </a>
+                            @endif
+                        @else
+                            <a href="{{ route('login') }}" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
+                                </svg>
+                                Pesan Sekarang
+                            </a>
+                        @endauth
                     @else
                         <button disabled class="w-full bg-gray-300 text-gray-500 font-semibold py-4 px-6 rounded-lg cursor-not-allowed flex items-center justify-center">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,7 +463,33 @@ karena sudah ada di 'layouts.app' --}}
 
                 <!-- Content -->
                 <div class="px-8 py-6 max-h-[calc(90vh-200px)] overflow-y-auto">
-                    <livewire:booking-form :selectedKamarId="$kamar->id_kamar" />
+                    @auth
+                        @if(auth()->user()->role === 'member')
+                            <livewire:booking-form :selectedKamarId="$kamar->id_kamar" />
+                        @else
+                            <div class="text-center py-8">
+                                <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                                <p class="text-gray-500 text-lg mb-2">Akses Terbatas</p>
+                                <p class="text-gray-400 text-sm">Hanya member yang dapat melakukan pemesanan.</p>
+                            </div>
+                        @endif
+                    @else
+                        <div class="text-center py-8">
+                            <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            <p class="text-gray-500 text-lg mb-2">Login Diperlukan</p>
+                            <p class="text-gray-400 text-sm mb-4">Silakan login untuk melakukan pemesanan kamar.</p>
+                            <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                                Login Sekarang
+                            </a>
+                        </div>
+                    @endauth
                 </div>
 
                 <!-- Footer -->
@@ -616,7 +660,7 @@ karena sudah ada di 'layouts.app' --}}
                 this.disabled = true;
                 this.innerHTML = '<svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Loading...';
 
-                const url = inWishlist ? {{ route('member.wishlist.destroy', ':id') }}.replace(':id', kamarId) : {{ route('member.wishlist.store') }};
+                const url = inWishlist ? `{{ route('member.wishlist.destroy', ':id') }}`.replace(':id', kamarId) : `{{ route('member.wishlist.store') }}`;
 
                 fetch(url, {
                     method: inWishlist ? 'DELETE' : 'POST',
@@ -633,7 +677,7 @@ karena sudah ada di 'layouts.app' --}}
                     if (data.success) {
                         const newInWishlist = !inWishlist;
                         this.setAttribute('data-in-wishlist', newInWishlist ? 'true' : 'false');
-                        this.className = w-full ${newInWishlist ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-500 hover:bg-gray-600'} text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4;
+                        this.className = `w-full ${newInWishlist ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-500 hover:bg-gray-600'} text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4`;
                         this.innerHTML = `
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
@@ -672,7 +716,7 @@ karena sudah ada di 'layouts.app' --}}
 
             // Create notification element
             const notification = document.createElement('div');
-            notification.className = notification fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full;
+            notification.className = `notification fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
             notification.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
             notification.textContent = message;
 

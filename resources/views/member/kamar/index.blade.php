@@ -8,44 +8,17 @@
 @include('components.Navbar')
 @include('components.herosectionkamar')
 
-{{-- Search/Filter Bar (Diposisikan menindih Hero Section, DITURUNKAN DENGAN MENGURANGI MARGIN NEGATIF) --}}
-<div class="relative z-30 -mt-0 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-white p-6 rounded-2xl shadow-2xl ring-2 ring-yellow-500/50">
-        {{-- Search Input Styling --}}
-        <div class="flex-1">
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.435 4.195l4.156 4.156a.75.75 0 11-1.06 1.06l-4.155-4.156A7 7 0 012 9z" clip-rule="evenodd" /></svg>
-                </div>
-                <input type="text" placeholder="Search by name or room type" class="block w-full rounded-xl border border-gray-300 py-3 pl-10 pr-4 text-gray-900 focus:ring-yellow-500 focus:border-yellow-500 text-sm placeholder-gray-500 shadow-inner transition duration-300">
-            </div>
-        </div>
-
-        {{-- Filter Dropdown Styling --}}
-        <div class="md:w-1/3 relative">
-            <select class="block w-full rounded-xl border border-gray-300 py-3 pl-5 pr-25 text-gray-900 focus:ring-yellow-500 focus:border-yellow-500 text-sm appearance-none shadow-inner transition duration-300">
-                <option>All Type</option>
-                <option>Standard</option>
-                <option>Deluxe</option>
-                <option>Suite</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
-        </div>
-
-        <div class="md:w-1/4 relative">
-            <select class="block w-full rounded-xl border border-gray-300 py-3 pl-4 pr-10 text-gray-900 focus:ring-yellow-500 focus:border-yellow-500 text-sm appearance-none shadow-inner transition duration-300">
-                <option>Recomendation</option>
-                <option>Lowest Price</option>
-                <option>Highest Price</option>
-                <option>Top Rated</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
-        </div>
-    </div>
+{{-- Search/Filter Bar --}}
+<div class="relative z-30 -mt-16 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <x-filter-section
+        title="Find Your Perfect Stay"
+        :showSearch="true"
+        :showTypeFilter="true"
+        :showSortFilter="true"
+        :showPriceFilter="true"
+        searchPlaceholder="Search by room name or type..."
+        :tipeKamars="$tipeKamars ?? []"
+    />
 </div>
 
 {{-- Room List Content --}}
@@ -97,15 +70,15 @@
                     {{-- Action Buttons --}}
                     <div class="flex space-x-4">
                         {{-- Detail Button (Styling: bg-gray-100, border, shadow-inner) --}}
-                        <a href="#" class="flex-1 text-center px-4 py-3 rounded-xl text-gray-700 bg-gray-100 border border-gray-300 hover:bg-gray-200 transition font-semibold shadow-inner">
+                        <a href="{{ route('member.kamar.show', $kamar) }}" class="flex-1 text-center px-4 py-3 rounded-xl text-gray-700 bg-gray-100 border border-gray-300 hover:bg-gray-200 transition font-semibold shadow-inner">
                             Detail
                         </a>
 
-                        {{-- Booking Button (Styling: bg-yellow-600, shadow-lg shadow-yellow-500/50, hover:-translate-y-0.5) --}}
+                        {{-- Book Now Button (Styling: bg-yellow-600, shadow-lg shadow-yellow-500/50, hover:-translate-y-0.5) --}}
                         @if(($kamar->status_ketersediaan ?? 'booked') == 'available')
                             <button onclick="openBookingModal({{ $kamar->id_kamar }})"
                                class="flex-1 text-center px-4 py-3 rounded-xl bg-yellow-600 text-white shadow-lg shadow-yellow-500/50 hover:bg-yellow-700 transition font-semibold transform hover:-translate-y-0.5">
-                                Booking
+                                Book Now
                             </button>
                         @else
                             {{-- Booked Button (Disabled) --}}

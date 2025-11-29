@@ -65,7 +65,7 @@ class BookingForm extends Component
         if ($this->selectedKamarId && $this->tgl_check_in && $this->tgl_check_out) {
             $checkIn = Carbon::parse($this->tgl_check_in);
             $checkOut = Carbon::parse($this->tgl_check_out);
-            
+
             if ($checkOut > $checkIn) {
                 $this->total_malam = $checkIn->diffInDays($checkOut);
                 $kamar = Kamar::with('tipe')->find($this->selectedKamarId);
@@ -89,7 +89,7 @@ class BookingForm extends Component
         // Update user data
         $user->update([
             'nik' => $this->nik,
-            'nohp' => $this->nohp,
+            'nohp' => $user->nohp,
         ]);
 
         $pemesanan = Pemesanan::create([
