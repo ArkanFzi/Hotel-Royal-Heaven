@@ -5,11 +5,10 @@
 @section('content')
 
 {{-- TEMPATKAN PEMANGGILAN NAVBAR ANDA DI SINI --}}
-
 @include('components.herosectionkamar')
 
 {{-- Search/Filter Bar --}}
-<div class="relative z-30 -mt-16 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div id="main-content" class="relative z-30 -mt-16 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <x-filter-section
         title="Find Your Perfect Stay"
         :showSearch="true"
@@ -23,66 +22,55 @@
 
 {{-- Room List Content --}}
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    {{-- Grid Kamar (grid-cols-3) --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+    {{-- Grid Kamar (grid-cols-5) --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         @forelse($kamars ?? [] as $kamar)
-            {{-- Kamar Card (Styling: rounded-2xl, shadow-xl, hover:shadow-2xl, hover:scale-[1.01], transition) --}}
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100 transform hover:shadow-2xl hover:scale-[1.01] transition duration-300">
-                {{-- Image Placeholder Area --}}
-                <div class="relative h-60">
-                    <img class="w-full h-full object-cover"
-                         src="https://placehold.co/600x400/FACC15/FFFFFF/PNG?text={{ $kamar->tipe->nama_tipe ?? 'ROOM' }}"
-                         alt="Gambar Kamar {{ $kamar->nomor_kamar }}">
-
-                    {{-- Status Badge (Styling: rounded-full, bg-green-600/bg-red-600, shadow-lg) --}}
-                    <span class="absolute top-4 right-4 px-4 py-1.5 rounded-full text-xs font-bold uppercase shadow-lg
+            <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 group flex flex-col">
+                {{-- Image --}}
+                <div class="h-64 w-full overflow-hidden bg-gray-200 relative">
+                    @if($kamar->foto_kamar)
+                        <img src="{{ asset('storage/' . $kamar->foto_kamar) }}" alt="{{ $kamar->nomor_kamar }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-gray-400">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                    @endif
+                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-900 shadow-sm">
+                        {{ $kamar->tipe->nama_tipe }}
+                    </div>
+                    {{-- Status Badge --}}
+                    <span class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase shadow-sm
                         @if(($kamar->status_ketersediaan ?? 'booked') == 'available')
-                            bg-green-600 text-white
+                            bg-green-500 text-white
                         @else
-                            bg-red-600 text-white
+                            bg-red-500 text-white
                         @endif">
                         {{ ucfirst($kamar->status_ketersediaan ?? 'Booked') }}
                     </span>
                 </div>
 
-                <div class="p-6">
-                    {{-- Price (Styling: text-yellow-600, font-extrabold) --}}
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Room</p>
-                            <h3 class="text-2xl font-bold text-gray-900">Kamar {{ $kamar->nomor_kamar }}</h3>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Price</p>
-                            <p class="text-2xl font-extrabold text-yellow-600">
-                                Rp {{ number_format($kamar->tipe->harga_dasar ?? 0, 0, ',', '.') }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Type</p>
-                    <p class="text-base font-semibold text-gray-700 mb-2">{{ $kamar->tipe->nama_tipe ?? 'Tipe Standar' }}</p>
-
-                    <p class="text-sm text-gray-500 mb-6 line-clamp-2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Perfect comfort with our selection of luxury hotel rooms.
+                {{-- Content --}}
+                <div class="p-4 bg-gray-100/50 flex flex-col flex-grow">
+                    <h3 class="text-lg font-bold text-gray-900 mb-1">Kamar {{ $kamar->nomor_kamar }}</h3>
+                    <p class="text-gray-500 text-xs line-clamp-2 mb-3 flex-grow">
+                        {{ $kamar->deskripsi ?? 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Perfect comfort with our selection of luxury hotel rooms.' }}
                     </p>
 
-                    {{-- Action Buttons --}}
-                    <div class="flex space-x-4">
-                        {{-- Detail Button (Styling: bg-gray-100, border, shadow-inner) --}}
-                        <a href="{{ route('member.kamar.show', $kamar) }}" class="flex-1 text-center px-4 py-3 rounded-xl text-gray-700 bg-gray-100 border border-gray-300 hover:bg-gray-200 transition font-semibold shadow-inner">
+                    <div class="flex flex-col gap-1 mb-3">
+                        <span class="text-xs font-semibold text-yellow-600 uppercase tracking-wider">Price</span>
+                        <span class="text-sm font-bold text-gray-900">Rp {{ number_format($kamar->tipe->harga_dasar ?? 0, 0, ',', '.') }}</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-auto">
+                        <a href="{{ route('member.kamar.show', $kamar) }}" class="px-2 py-2 text-center text-xs font-semibold text-gray-700 border border-gray-300 rounded-lg hover:bg-white hover:border-gray-400 transition">
                             Detail
                         </a>
-
-                        {{-- Book Now Button (Styling: bg-yellow-600, shadow-lg shadow-yellow-500/50, hover:-translate-y-0.5) --}}
                         @if(($kamar->status_ketersediaan ?? 'booked') == 'available')
-                            <button onclick="openBookingModal({{ $kamar->id_kamar }})"
-                               class="flex-1 text-center px-4 py-3 rounded-xl bg-yellow-600 text-white shadow-lg shadow-yellow-500/50 hover:bg-yellow-700 transition font-semibold transform hover:-translate-y-0.5">
-                                Book Now
+                            <button onclick="openBookingModal({{ $kamar->id_kamar }})" class="px-2 py-2 text-center text-xs font-semibold text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition shadow-md shadow-yellow-200">
+                                Book
                             </button>
                         @else
-                            {{-- Booked Button (Disabled) --}}
-                            <button disabled class="flex-1 text-center px-4 py-3 rounded-xl bg-red-400 text-white font-semibold cursor-not-allowed opacity-70 shadow-inner">
+                            <button disabled class="px-2 py-2 text-center text-xs font-semibold text-white bg-red-400 rounded-lg cursor-not-allowed opacity-70">
                                 Booked
                             </button>
                         @endif
@@ -132,17 +120,14 @@
 </div>
 
 <script>
-    let selectedKamarId = null;
-
     function openBookingModal(kamarId) {
-        selectedKamarId = kamarId;
         const modal = document.getElementById('bookingModal');
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
 
         // Update Livewire component with selected room
         if (window.livewire) {
-            window.livewire.find('booking-form').set('selectedKamarId', kamarId);
+            window.livewire.find('booking-form').call('setSelectedRoom', kamarId);
         }
     }
 
@@ -150,7 +135,6 @@
         const modal = document.getElementById('bookingModal');
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
-        selectedKamarId = null;
     }
 
     // Event listeners

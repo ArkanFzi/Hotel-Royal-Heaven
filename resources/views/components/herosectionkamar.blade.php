@@ -4,7 +4,7 @@
     'description' => 'Discover perfect comfort with our selection of luxury hotel rooms designed to provide an unforgettable stay.',
     'image' => 'user/interiorkamar (2).jpg',
     'ctaText' => 'Explore Rooms',
-    'ctaLink' => '#',
+    'ctaLink' => '#main-content',
     'splitPercent' => 50, // Default split at 50% width
     'angle' => 105, // Default angle
     'bgHex' => '#E3A008' // Default to gold-500 from palette
@@ -13,7 +13,7 @@
 <section class="relative w-full min-h-[700px] lg:h-screen flex items-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 lg:pt-32">
     {{-- Background with Diagonal Split using Linear Gradient --}}
     <div class="absolute inset-0 z-0 hidden lg:block parallax"
-         style="background: linear-gradient({{ $angle }}deg, {{ $bgHex }} 0%, {{ $bgHex }} {{ $splitPercent }}%, transparent {{ $splitPercent }}.1%, transparent 100%), url('{{ $image }}');
+         style="background: linear-gradient({{ $angle }}deg, {{ $bgHex }} 0%, {{ $bgHex }} {{ $splitPercent }}%, transparent {{ $splitPercent }}.1%, transparent 100%), url('{{ asset($image) }}');
                 background-size: cover;
                 background-position: center;"
          data-parallax="0.3">
@@ -24,15 +24,12 @@
     {{-- Mobile Background (Stacked) --}}
     <div class="absolute inset-0 z-0 lg:hidden">
         <div class="absolute inset-0 bg-gradient-to-br from-yellow-600 to-yellow-800 opacity-95 z-10"></div>
-        <img src="{{ $image }}" class="absolute inset-0 w-full h-full object-cover opacity-20 z-0" alt="Background">
+        <img src="{{ asset($image) }}" class="absolute inset-0 w-full h-full object-cover opacity-20 z-0" alt="Background">
         {{-- Mobile overlay --}}
         <div class="absolute inset-0 bg-black bg-opacity-30 z-5"></div>
     </div>
 
-    {{-- Decorative Elements --}}
-    <div class="absolute top-20 left-10 w-32 h-32 border border-yellow-400 rounded-full opacity-10 animate-pulse"></div>
-    <div class="absolute bottom-20 right-10 w-24 h-24 border border-yellow-400 rounded-full opacity-10 animate-pulse" style="animation-delay: 1s;"></div>
-    <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-yellow-400 rounded-full opacity-5 animate-bounce" style="animation-delay: 2s;"></div>
+
 
     {{-- Content Container --}}
     <div class="relative z-10 max-w-[120rem] mx-auto px-4 sm:px-6 lg:px-8 w-full h-full flex items-center">
@@ -72,10 +69,5 @@
         </div>
     </div>
 
-    {{-- Scroll Indicator --}}
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 animate-bounce">
-        <div class="w-6 h-10 border-2 border-white border-opacity-50 rounded-full flex justify-center">
-            <div class="w-1 h-3 bg-white bg-opacity-50 rounded-full mt-2 animate-pulse"></div>
-        </div>
-    </div>
+
 </section>

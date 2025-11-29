@@ -14,7 +14,7 @@ karena sudah ada di 'layouts.app' --}}
     title="{{ $kamar->nomor_kamar }} - {{ $kamar->tipe->nama_tipe }}"
     subtitle="Luxury Accommodation"
     description="{{ $kamar->deskripsi ?: 'Nikmati kenyamanan menginap di kamar yang dirancang untuk memberikan pengalaman terbaik. Kamar ini dilengkapi dengan fasilitas modern dan pelayanan prima untuk memastikan istirahat Anda maksimal.' }}"
-    :image="$kamar->foto_kamar ? 'storage/' . $kamar->foto_kamar : 'user/GambarHeroSection.jpg'"
+    :image="'user/GambarHeroSection.jpg'"
     ctaText="Pesan Sekarang"
     ctaLink="#booking-section"
     splitPercent="50"
