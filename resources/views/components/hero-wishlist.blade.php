@@ -2,7 +2,7 @@
     'title' => 'Your Favorite Rooms',
     'subtitle' => 'Personal Collection',
     'description' => 'Keep track of your favorite rooms and plan your perfect stay with ease.',
-    'image' => 'user/interiorkamar.jpg',
+    'image' => 'user/GambarHeroSection.jpg',
     'ctaText' => 'Explore More Rooms',
     'ctaLink' => '#',
     'splitPercent' => 50,

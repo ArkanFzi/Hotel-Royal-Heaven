@@ -122,7 +122,7 @@
                 <a href="{{ route('daftarkamar') }}" class="px-8 py-3 bg-white text-yellow-700 font-bold rounded-full hover:bg-gray-100 transition shadow-lg">
                     View Available Rooms
                 </a>
-                <a href="#" class="px-8 py-3 bg-yellow-700 text-white font-bold rounded-full hover:bg-yellow-800 transition shadow-lg border border-yellow-500">
+                <a href="{{ route('contact') }}" class="px-8 py-3 bg-yellow-700 text-white font-bold rounded-full hover:bg-yellow-800 transition shadow-lg border border-yellow-500">
                     Contact Us
                 </a>
             </div>
