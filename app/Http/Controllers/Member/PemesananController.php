@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Pemesanan;
 use App\Models\Kamar;
 use App\Models\Review;
+use App\Services\PaymentService;
+use App\Http\Requests\StoreBookingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +15,13 @@ use Mail;
 
 class PemesananController extends Controller
 {
+    protected $paymentService;
+
+    public function __construct(PaymentService $paymentService)
+    {
+        $this->paymentService = $paymentService;
+    }
+
     // Member's bookings
     public function myBookings(Request $request)
     {
@@ -60,18 +69,9 @@ class PemesananController extends Controller
     }
 
     // Store pemesanan
-    public function store(Request $request)
+    public function store(StoreBookingRequest $request)
     {
-        $data = $request->validate([
-            'id_kamar' => 'required|exists:kamar,id_kamar',
-            'nik' => 'required|string|max:20',
-            'nama' => 'required|string|max:150',
-            'nohp' => 'required|string|max:15',
-            'tgl_check_in' => 'required|date|after:today',
-            'tgl_check_out' => 'required|date|after:tgl_check_in',
-            'pilihan_pembayaran' => 'required|in:cash,transfer,kartu_kredit',
-            'catatan' => 'nullable|string|max:500',
-        ]);
+        $data = $request->validated();
 
         $user = Auth::user();
         $kamar = Kamar::findOrFail($data['id_kamar']);
@@ -102,8 +102,12 @@ class PemesananController extends Controller
             'pilihan_pembayaran' => $data['pilihan_pembayaran'],
             'catatan' => $data['catatan'] ?? null,
             'status_pemesanan' => 'pending',
+            'payment_status' => 'pending',
             'tgl_pemesanan' => now(),
         ]);
+
+        // Create payment record
+        $this->paymentService->createPayment($pemesanan, $data['pilihan_pembayaran']);
 
         if ($kamar->status_ketersediaan == 'available') {
             $kamar->status_ketersediaan = 'booked';

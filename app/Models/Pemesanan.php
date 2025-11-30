@@ -69,4 +69,9 @@ class Pemesanan extends Model
     {
         return $this->belongsTo(Kamar::class, 'id_kamar', 'id_kamar');
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class, 'pemesanan_id', 'id_pemesanan');
+    }
 }

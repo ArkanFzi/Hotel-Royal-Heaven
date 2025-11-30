@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pemesanan_id')->constrained('pemesanan')->onDelete('cascade');
+            $table->unsignedBigInteger('pemesanan_id');
+            $table->foreign('pemesanan_id')->references('id_pemesanan')->on('pemesanan')->onDelete('cascade');
             $table->string('payment_method'); // midtrans, stripe, bank_transfer, etc.
             $table->string('transaction_id')->unique(); // External payment gateway transaction ID
             $table->string('order_id')->unique(); // Internal order ID

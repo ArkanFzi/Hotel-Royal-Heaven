@@ -8,7 +8,7 @@
         title="Contact Us"
         subtitle="Get In Touch"
         description="Get in touch with us for reservations, inquiries, or any questions about your stay at Royal Heaven Hotel."
-        image="user/lobbyhtl.jpg"
+        image="user/contactUs3 (1).jpg"
         ctaText="Call Now"
         ctaLink="tel:+6281239450638"
         splitPercent="50"

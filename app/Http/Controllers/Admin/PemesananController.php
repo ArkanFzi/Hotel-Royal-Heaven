@@ -32,10 +32,21 @@ class PemesananController extends Controller
         $pemesanan->status_pemesanan = $newStatus;
         $pemesanan->save();
 
-        // If cancelled, mark kamar as available again
-        if ($newStatus == 'cancelled' && $pemesanan->kamar) {
-            $pemesanan->kamar->status_ketersediaan = 'available';
-            $pemesanan->kamar->save();
+        // Update room availability based on booking status
+        if ($pemesanan->kamar) {
+            if ($newStatus == 'confirmed') {
+                // When confirmed, room becomes unavailable
+                $pemesanan->kamar->status_ketersediaan = 'booked';
+                $pemesanan->kamar->save();
+            } elseif ($newStatus == 'cancelled') {
+                // When cancelled, room becomes available again
+                $pemesanan->kamar->status_ketersediaan = 'available';
+                $pemesanan->kamar->save();
+            } elseif ($newStatus == 'completed') {
+                // When completed, room becomes available again
+                $pemesanan->kamar->status_ketersediaan = 'available';
+                $pemesanan->kamar->save();
+            }
         }
 
         // Send email notification to member
@@ -47,5 +58,29 @@ class PemesananController extends Controller
         }
 
         return back()->with('success', 'Status pemesanan berhasil diperbarui.');
+    }
+
+    // Confirm cash payment (admin only)
+    public function confirmCashPayment(Pemesanan $pemesanan)
+    {
+        // Check if booking uses cash payment
+        if ($pemesanan->pilihan_pembayaran !== 'cash') {
+            return back()->with('error', 'Pembayaran ini bukan menggunakan metode cash.');
+        }
+
+        // Check if payment is still pending
+        if ($pemesanan->payment_status !== 'pending') {
+            return back()->with('error', 'Status pembayaran sudah dikonfirmasi atau dibatalkan.');
+        }
+
+        // Use PaymentService to confirm cash payment
+        $paymentService = app(\App\Services\PaymentService::class);
+        $result = $paymentService->confirmCashPayment($pemesanan);
+
+        if ($result) {
+            return back()->with('success', 'Pembayaran cash berhasil dikonfirmasi.');
+        } else {
+            return back()->with('error', 'Gagal mengkonfirmasi pembayaran cash.');
+        }
     }
 }

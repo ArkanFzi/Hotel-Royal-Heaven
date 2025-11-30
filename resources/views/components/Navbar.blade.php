@@ -1,8 +1,6 @@
 <header class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 pointer-events-none py-4">
-
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pointer-events-auto">
         <div class="flex items-start justify-between gap-4">
-
             {{-- 1. LOGO SECTION (Left) --}}
             <div class="relative z-50 transition-all duration-500 ease-in-out transform origin-top-left shrink-0 scale-100 translate-y-0">
                 <div class="bg-white rounded-b-[2.5rem] px-8 pb-6 pt-4 shadow-2xl flex flex-col items-center justify-center border-t-0 relative overflow-hidden group">
@@ -19,6 +17,7 @@
                     </a>
                 </div>
             </div>
+            
 
             {{-- Mobile Menu Button --}}
             <div class="md:hidden pt-2">
