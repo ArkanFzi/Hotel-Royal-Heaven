@@ -81,7 +81,7 @@
                     <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                         <div>
                             <p class="font-medium text-gray-900">{{ $booking->kamar->nomor_kamar }} - {{ $booking->kamar->tipe->nama_tipe }}</p>
-                            <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($booking->tgl_check_in)->format('d M Y') }} - {{ \Carbon\Carbon::parse($booking->tgl_check_out)->format('d M Y') }}</p>
+                            <p class="text-sm text-gray-600">{{ $booking->tgl_check_in ? \Carbon\Carbon::parse($booking->tgl_check_in)->format('d M Y') : 'N/A' }} - {{ $booking->tgl_check_out ? \Carbon\Carbon::parse($booking->tgl_check_out)->format('d M Y') : 'N/A' }}</p>
                         </div>
                         <span class="px-2 py-1 text-xs font-medium rounded-full
                             @if($booking->status_pemesanan == 'confirmed') bg-green-100 text-green-800

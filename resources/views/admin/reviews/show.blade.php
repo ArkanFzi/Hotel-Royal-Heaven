@@ -88,7 +88,7 @@
                         <!-- Date -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Review</label>
-                            <p class="text-sm text-gray-900">{{ $review->created_at->format('l, d F Y H:i') }}</p>
+                            <p class="text-sm text-gray-900">{{ \Carbon\Carbon::parse($review->created_at)->format('l, d F Y H:i') }}</p>
                         </div>
                     </div>
                 </div>

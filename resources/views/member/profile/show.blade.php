@@ -184,7 +184,7 @@
                                             <div class="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
                                             <div class="flex-1">
                                                 <p class="text-sm font-medium text-gray-900">{{ $activity->kamar->nama_kamar ?? 'Kamar' }}</p>
-                                                <p class="text-xs text-gray-600">{{ $activity->check_in->format('d M Y') }} - {{ $activity->check_out->format('d M Y') }}</p>
+                                                <p class="text-xs text-gray-600">{{ $activity->check_in ? \Carbon\Carbon::parse($activity->check_in)->format('d M Y') : 'N/A' }} - {{ $activity->check_out ? \Carbon\Carbon::parse($activity->check_out)->format('d M Y') : 'N/A' }}</p>
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
                                                     @if($activity->status_pemesanan == 'confirmed') bg-green-100 text-green-800
                                                     @elseif($activity->status_pemesanan == 'checked_in') bg-blue-100 text-blue-800
@@ -210,7 +210,7 @@
                                             <div class="w-2 h-2 bg-gray-400 rounded-full mt-2"></div>
                                             <div class="flex-1">
                                                 <p class="text-sm font-medium text-gray-900">{{ $activity->kamar->nama_kamar ?? 'Kamar' }}</p>
-                                                <p class="text-xs text-gray-600">{{ $activity->check_in->format('d M Y') }} - {{ $activity->check_out->format('d M Y') }}</p>
+                                                <p class="text-xs text-gray-600">{{ $activity->check_in ? \Carbon\Carbon::parse($activity->check_in)->format('d M Y') : 'N/A' }} - {{ $activity->check_out ? \Carbon\Carbon::parse($activity->check_out)->format('d M Y') : 'N/A' }}</p>
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
                                                     @if($activity->status_pemesanan == 'completed') bg-green-100 text-green-800
                                                     @elseif($activity->status_pemesanan == 'cancelled') bg-red-100 text-red-800
@@ -294,7 +294,7 @@
                                 <div class="space-y-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-600">Tanggal Daftar</label>
-                                        <p class="text-sm text-gray-900 mt-1">{{ $user->created_at->format('d M Y') }}</p>
+                                        <p class="text-sm text-gray-900 mt-1">{{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->format('d M Y') : 'N/A' }}</p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-600">Total Pemesanan</label>

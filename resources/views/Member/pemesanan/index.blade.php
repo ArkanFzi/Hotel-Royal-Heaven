@@ -9,7 +9,7 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-lg font-semibold text-gray-800 mb-4">Cari Pemesanan</h2>
             
-            <form method="GET" action="{{ route('member.pemesanan.index') }}" class="flex gap-3">
+            <form method="GET" action="{{ route('member.pemesanan.my') }}" class="flex gap-3">
                 <input 
                     type="text" 
                     name="search" 
@@ -58,14 +58,14 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         @if($p->tgl_check_in)
-                                            {{ \Carbon\Carbon::parse($p->tgl_check_in)->format('d M Y') }}
+                                            {{ $p->tgl_check_in ? \Carbon\Carbon::parse($p->tgl_check_in)->format('d M Y') : 'N/A' }}
                                         @else
                                             -
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         @if($p->tgl_check_out)
-                                            {{ \Carbon\Carbon::parse($p->tgl_check_out)->format('d M Y') }}
+                                            {{ $p->tgl_check_out ? \Carbon\Carbon::parse($p->tgl_check_out)->format('d M Y') : 'N/A' }}
                                         @else
                                             -
                                         @endif

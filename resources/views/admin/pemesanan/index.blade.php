@@ -55,7 +55,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ $p->kamar->nomor_kamar ?? 'N/A' }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {{ \Carbon\Carbon::parse($p->tgl_check_in)->format('d M Y') }} - {{ \Carbon\Carbon::parse($p->tgl_check_out)->format('d M Y') }}
+                        {{ $p->tgl_check_in ? \Carbon\Carbon::parse($p->tgl_check_in)->format('d M Y') : 'N/A' }} - {{ $p->tgl_check_out ? \Carbon\Carbon::parse($p->tgl_check_out)->format('d M Y') : 'N/A' }}
                         <span class="text-xs">({{ $p->total_malam }} malam)</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-800">Rp {{ number_format($p->total_harga, 0, ',', '.') }}</td>

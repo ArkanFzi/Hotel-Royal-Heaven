@@ -109,11 +109,6 @@ class PemesananController extends Controller
         // Create payment record
         $this->paymentService->createPayment($pemesanan, $data['pilihan_pembayaran']);
 
-        if ($kamar->status_ketersediaan == 'available') {
-            $kamar->status_ketersediaan = 'booked';
-            $kamar->save();
-        }
-
         // Send booking confirmation email
         try {
             \Mail::to($user->email)->send(new \App\Mail\BookingConfirmation($pemesanan));

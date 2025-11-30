@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthApiController;
 use App\Http\Controllers\Api\RoomApiController;
 use App\Http\Controllers\Api\BookingApiController;
+use App\Http\Controllers\Api\CalendarApiController;
 
 Route::post('register', [AuthApiController::class, 'register']);
 Route::post('login', [AuthApiController::class, 'login']);
@@ -24,4 +25,9 @@ Route::middleware(['auth.api'])->group(function(){
     Route::post('bookings', [BookingApiController::class, 'store']);
     Route::get('bookings/{id}', [BookingApiController::class, 'show']);
     Route::post('bookings/{id}/status', [BookingApiController::class, 'updateStatus']);
+
+    // calendar
+    Route::get('calendar/availability', [CalendarApiController::class, 'availability']);
+    Route::get('calendar/bookings', [CalendarApiController::class, 'bookings']);
+    Route::get('calendar/occupancy', [CalendarApiController::class, 'occupancy']);
 });

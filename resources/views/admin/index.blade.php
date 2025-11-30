@@ -57,7 +57,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{{ $booking->id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $booking->user->name ?? 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $booking->kamar->nomor_kamar ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ \Carbon\Carbon::parse($booking->tgl_check_in)->format('d M Y') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $booking->tgl_check_in ? \Carbon\Carbon::parse($booking->tgl_check_in)->format('d M Y') : 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                         {{ $booking->status == 'completed' ? 'bg-green-100 text-green-800' : '' }}

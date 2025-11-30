@@ -46,7 +46,7 @@
                         {{ Str::limit($review->komentar, 50) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {{ $review->created_at->format('d M Y H:i') }}
+                        {{ \Carbon\Carbon::parse($review->created_at)->format('d M Y H:i') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div class="flex space-x-2">

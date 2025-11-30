@@ -21,7 +21,7 @@
     </div>
 
     {{-- Filter Form --}}
-    <form class="space-y-3">
+    <form method="GET" action="{{ url()->current() }}" class="space-y-3">
         {{-- Primary Filters Row (Always Visible) --}}
         <div class="flex flex-col sm:flex-row gap-3">
             {{-- Search Input --}}

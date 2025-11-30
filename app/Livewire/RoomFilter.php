@@ -177,7 +177,9 @@ class RoomFilter extends Component
         }
 
         $kamars = $query->paginate(6);
-        $tipeKamars = TipeKamar::all();
+        $tipeKamars = TipeKamar::whereHas('kamars', function ($q) {
+            $q->where('status_ketersediaan', 'available');
+        })->get();
 
         return view('livewire.room-filter', [
             'kamars' => $kamars,

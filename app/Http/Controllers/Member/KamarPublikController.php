@@ -80,11 +80,8 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
         }
 
         // Apply sorting
-        $sort = $request->get('sort', 'latest');
+        $sort = $request->get('sort', 'recommendation');
         switch ($sort) {
-            case 'name':
-                $query->orderBy('nomor_kamar', 'asc');
-                break;
             case 'price_low':
                 $query->join('tipe_kamar', 'kamar.id_tipe', '=', 'tipe_kamar.id_tipe')
                       ->orderBy('tipe_kamar.harga_dasar', 'asc')
@@ -95,18 +92,29 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
                       ->orderBy('tipe_kamar.harga_dasar', 'desc')
                       ->select('kamar.*');
                 break;
-            case 'latest':
+            case 'rating':
+                $query->leftJoin('reviews', 'kamar.id_kamar', '=', 'reviews.id_kamar')
+                      ->select('kamar.*', \DB::raw('AVG(reviews.rating) as avg_rating'))
+                      ->groupBy('kamar.id_kamar')
+                      ->orderBy('avg_rating', 'desc');
+                break;
+            case 'newest':
+                $query->orderBy('kamar.created_at', 'desc');
+                break;
+            case 'recommendation':
             default:
-                $query->orderBy('created_at', 'desc');
+                $query->orderBy('kamar.created_at', 'desc');
                 break;
         }
 
         $kamars = $query->paginate(12)->withQueryString();
-        $tipeKamars = \App\Models\TipeKamar::all();
+        $tipeKamars = \App\Models\TipeKamar::whereHas('kamars', function ($q) {
+            $q->where('status_ketersediaan', 'available');
+        })->get();
 
         // Check if this is member route
         if ($request->is('member/kamar')) {
-            return view('Member.kamar.index', compact('kamars'));
+            return view('Member.kamar.index', compact('kamars', 'tipeKamars'));
         }
 
         return view('kamar.index', compact('kamars', 'tipeKamars'));

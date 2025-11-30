@@ -29,8 +29,8 @@
             </div>
 
             {{-- 2. NAVIGATION SECTION (Center) --}}
-            <div class="hidden md:block pt-2 transition-all duration-500">
-                 <nav class="bg-white rounded-full shadow-xl px-2 py-2.5 flex items-center gap-1 transition-all duration-500 border border-gray-100">
+            <div class="hidden md:block transition-all duration-500">
+                 <nav class="bg-white rounded-full shadow-xl px-2 py-3 flex items-center gap-1 transition-all duration-500 border border-gray-100">
                     <div class="flex items-center px-4 gap-1">
                         <a href="{{ route('landing') }}"
                            class="px-5 py-2.5 text-sm font-medium rounded-full transition-all duration-300 relative overflow-hidden group {{ request()->routeIs('landing') || request()->routeIs('home') ? 'text-yellow-600 bg-yellow-50 font-bold' : 'text-gray-600 hover:text-yellow-600 hover:bg-gray-50' }}">
@@ -51,8 +51,8 @@
             </div>
 
             {{-- 3. AUTH SECTION (Right) --}}
-            <div class="hidden md:block pt-2 transition-all duration-500">
-                <div class="bg-white rounded-full shadow-xl px-2 py-2.5 flex items-center gap-2 transition-all duration-500 border border-gray-100">
+            <div class="hidden md:block transition-all duration-500">
+                <div class="bg-white rounded-full shadow-xl px-2 py-3 flex items-center gap-2 transition-all duration-500 border border-gray-100">
 
                     @if(auth()->check())
                         @if(!auth()->user()->isAdmin())

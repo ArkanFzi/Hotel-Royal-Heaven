@@ -2,16 +2,15 @@
     'title' => 'Your Favorite Rooms',
     'subtitle' => 'Personal Collection',
     'description' => 'Keep track of your favorite rooms and plan your perfect stay with ease.',
-    'image' => 'user/GambarHeroSection.jpg',
+    'image' => '/user/wishlist.jpg',
     'ctaText' => 'Explore More Rooms',
     'ctaLink' => '#',
     'splitPercent' => 50,
     'angle' => 105,
-    'bgHex' => '#E3A008',
-    'wishlists' => null
+    'bgHex' => '#E3A008'
 ])
 
-<section class="relative w-full min-h-[600px] lg:h-screen flex items-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 lg:pt-32">
+<section class="relative w-full min-h-[800px] lg:h-screen flex items-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-black pt-24 lg:pt-32">
     {{-- Background with Diagonal Split using Linear Gradient --}}
     <div class="absolute inset-0 z-0 hidden lg:block parallax"
          style="background: linear-gradient({{ $angle }}deg, {{ $bgHex }} 0%, {{ $bgHex }} {{ $splitPercent }}%, transparent {{ $splitPercent }}.1%, transparent 100%), url('{{ $image }}');
@@ -71,7 +70,7 @@
                      <svg class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                      </svg>
-                     <span class="group-hover:text-yellow-300 transition-colors">{{ $wishlists->count() ?? 0 }} Favorite Rooms</span>
+                     <span class="group-hover:text-yellow-300 transition-colors">View Wishlist</span>
                  </div>
              </div>
              @endif

@@ -113,14 +113,16 @@ function initNotificationSystem() {
 // Form enhancements
 function initFormEnhancements() {
     document.querySelectorAll('form').forEach(form => {
-        // Add loading states
-        form.addEventListener('submit', function(e) {
-            const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
-            }
-        });
+        // Add loading states (exclude logout forms)
+        if (!form.action.includes('/logout')) {
+            form.addEventListener('submit', function(e) {
+                const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
+                }
+            });
+        }
 
         // Real-time validation
         form.querySelectorAll('input, textarea, select').forEach(field => {

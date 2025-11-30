@@ -18,7 +18,7 @@
                 <div class="flex justify-between items-start mb-4">
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900">{{ $review->kamar->nomor_kamar }} - {{ $review->kamar->tipe->nama_tipe }}</h3>
-                        <p class="text-sm text-gray-600">{{ $review->created_at->format('d M Y, H:i') }}</p>
+                        <p class="text-sm text-gray-600">{{ $review->created_at ? \Carbon\Carbon::parse($review->created_at)->format('d M Y, H:i') : 'N/A' }}</p>
                     </div>
                     <div class="flex items-center">
                         @for($i = 1; $i <= 5; $i++)

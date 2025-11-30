@@ -198,7 +198,7 @@ karena sudah ada di 'layouts.app' --}}
                 <p class="text-gray-700 mb-4 italic">"{{ Str::limit($review->komentar, 120) }}"</p>
                 <div class="font-semibold text-gray-900">{{ $review->user->name }}</div>
                 <div class="text-sm text-gray-600">{{ $review->kamar->nomor_kamar }} - {{ $review->kamar->tipe->nama_tipe }}</div>
-                <div class="text-xs text-gray-500 mt-1">{{ $review->created_at->diffForHumans() }}</div>
+                <div class="text-xs text-gray-500 mt-1">{{ $review->created_at ? \Carbon\Carbon::parse($review->created_at)->diffForHumans() : 'N/A' }}</div>
             </div>
             @empty
             <div class="col-span-3 text-center py-8">

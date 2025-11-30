@@ -86,8 +86,11 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     // Tipe Kamar
     Route::resource('tipe-kamar', App\Http\Controllers\Admin\TipeKamarController::class, ['as' => 'admin']);
 
+    // Calendar
+    Route::get('calendar', function () {
+        return view('admin.calendar.index');
+    })->name('admin.calendar.index');
 
-    
     // Profile Admin
     Route::get('profile', [AdminProfileController::class, 'show'])->name('admin.profile');
     Route::put('profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');

@@ -27,7 +27,7 @@ karena sudah ada di 'layouts.app' --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('daftarkamar') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
+                    <a href="{{ auth()->check() && auth()->user()->role === 'member' ? route('member.kamar.index') : route('daftarkamar') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
@@ -216,7 +216,7 @@ karena sudah ada di 'layouts.app' --}}
                                             @if($review->komentar)
                                                 <p class="text-gray-700 leading-relaxed">{{ $review->komentar }}</p>
                                             @endif
-                                            <p class="text-sm text-gray-500 mt-2">{{ $review->created_at->format('d M Y') }}</p>
+                                            <p class="text-sm text-gray-500 mt-2">{{ $review->created_at ? \Carbon\Carbon::parse($review->created_at)->format('d M Y') : 'N/A' }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -374,14 +374,14 @@ karena sudah ada di 'layouts.app' --}}
                                     </svg>
                                     Pesan Sekarang
                                 </button>
-                            @else
-                                <a href="{{ route('login') }}" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
-                                    </svg>
-                                    Pesan Sekarang
-                                </a>
-                            @endif
+                        @else
+                            <button onclick="openBookingModal()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
+                                </svg>
+                                Pesan Sekarang
+                            </button>
+                        @endif
                         @else
                             <a href="{{ route('login') }}" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

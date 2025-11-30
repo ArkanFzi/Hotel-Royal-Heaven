@@ -94,8 +94,9 @@ class BookingForm extends Component
 
         // Update user data
         $user->update([
+            'nama_lengkap' => $this->nama,
             'nik' => $this->nik,
-            'nohp' => $user->nohp,
+            'nohp' => $this->nohp,
         ]);
 
         $pemesanan = Pemesanan::create([

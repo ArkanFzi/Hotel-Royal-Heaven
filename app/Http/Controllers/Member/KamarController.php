@@ -15,7 +15,12 @@ public function show(Kamar $kamar)
                 return $kamar;
             });
 
-        return view('member.kamar.index', compact('kamar'));
+        // Get room types that have available rooms
+        $tipeKamars = \App\Models\TipeKamar::whereHas('kamars', function ($query) {
+            $query->where('status_ketersediaan', 'available');
+        })->get();
+
+        return view('member.kamar.index', compact('kamar', 'tipeKamars'));
     }
 
     // Show kamar detail

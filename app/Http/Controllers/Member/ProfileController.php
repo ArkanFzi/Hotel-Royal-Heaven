@@ -52,6 +52,12 @@ class ProfileController extends Controller
             $data['profile_photo'] = $path;
         }
 
+        // Map form field 'name' to database field 'nama_lengkap'
+        if (isset($data['name'])) {
+            $data['nama_lengkap'] = $data['name'];
+            unset($data['name']);
+        }
+
         // Remove password if not provided
         if (empty($data['password'])) {
             unset($data['password']);

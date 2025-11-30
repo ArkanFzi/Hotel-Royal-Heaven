@@ -36,8 +36,8 @@
                 <h3>Booking Details</h3>
                 <p><strong>Booking Code:</strong> {{ $pemesanan->kode_pemesanan }}</p>
                 <p><strong>Room:</strong> {{ $kamar->nomor_kamar }} - {{ $kamar->tipe->nama_tipe }}</p>
-                <p><strong>Check-in:</strong> {{ \Carbon\Carbon::parse($pemesanan->tgl_check_in)->format('d M Y') }}</p>
-                <p><strong>Check-out:</strong> {{ \Carbon\Carbon::parse($pemesanan->tgl_check_out)->format('d M Y') }}</p>
+                <p><strong>Check-in:</strong> {{ $pemesanan->tgl_check_in ? \Carbon\Carbon::parse($pemesanan->tgl_check_in)->format('d M Y') : 'N/A' }}</p>
+                <p><strong>Check-out:</strong> {{ $pemesanan->tgl_check_out ? \Carbon\Carbon::parse($pemesanan->tgl_check_out)->format('d M Y') : 'N/A' }}</p>
                 <p><strong>Total Price:</strong> Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</p>
             </div>
 

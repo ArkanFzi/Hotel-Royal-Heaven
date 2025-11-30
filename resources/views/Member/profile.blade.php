@@ -12,6 +12,43 @@
         </div>
     @endif
 
+    <!-- Informasi Pribadi -->
+    <div class="mb-8">
+        <h3 class="text-lg font-semibold mb-4">Informasi Pribadi</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                <p class="mt-1 text-sm text-gray-900">{{ $user->nama_lengkap ?: 'Belum diisi' }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Username</label>
+                <p class="mt-1 text-sm text-gray-900">{{ $user->username }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <p class="mt-1 text-sm text-gray-900">{{ $user->email }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">No. Telepon</label>
+                <p class="mt-1 text-sm text-gray-900">{{ $user->nohp ?: 'Belum diisi' }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">NIK</label>
+                <p class="mt-1 text-sm text-gray-900">{{ $user->nik ?: 'Belum diisi' }}</p>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Role</label>
+                <p class="mt-1 text-sm text-gray-900">{{ ucfirst($user->role) }}</p>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-6">
+
+    <!-- Form Edit Profil -->
+    <div>
+        <h3 class="text-lg font-semibold mb-4">Edit Profil</h3>
+
     <form method="POST" action="{{ route('member.profile.update') }}">
         @csrf
         @method('PUT')
