@@ -20,7 +20,7 @@
             
 
             {{-- Mobile Menu Button --}}
-            <div class="md:hidden pt-2">
+            <div class="md:hidden pt-2 relative z-[60]">
                 <button class="mobile-menu-btn">
                     <span></span>
                     <span></span>

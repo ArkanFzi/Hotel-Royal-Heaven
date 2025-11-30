@@ -41,7 +41,7 @@
                  <span class="text-sm font-bold tracking-widest uppercase text-yellow-600">
                      {{ $subtitle }}
                  </span>
-                 <div class="w-2 h-2 bg-yellow-600 rounded-full ml-3 animate-pulse"></div>
+
              </div>
 
              {{-- Title --}}
