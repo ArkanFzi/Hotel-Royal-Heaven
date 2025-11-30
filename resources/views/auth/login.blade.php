@@ -147,7 +147,7 @@
                         <label class="flex items-center gap-2 text-gray-600">
                             <input type="checkbox" name="remember" class="w-4 h-4 text-yellow-500 focus:ring-yellow-500 border-gray-300 rounded"> Remember me
                         </label>
-                        <a href="#" class="text-yellow-500 font-medium hover:text-yellow-600">Forgot Password?</a>
+                        <a href="{{ route('password.request') }}" class="text-yellow-500 font-medium hover:text-yellow-600">Forgot Password?</a>
                     </div>
 
                     <div>

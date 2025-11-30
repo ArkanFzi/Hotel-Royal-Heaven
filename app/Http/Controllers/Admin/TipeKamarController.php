@@ -8,9 +8,15 @@ use Illuminate\Http\Request;
 
 class TipeKamarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tipeKamars = TipeKamar::withCount('kamars')->paginate(10);
+        $query = TipeKamar::withCount('kamars');
+
+        if ($request->filled('search')) {
+            $query->where('nama_tipe', 'like', '%'.$request->input('search').'%');
+        }
+
+        $tipeKamars = $query->paginate(10);
         return view('admin.tipe-kamar.index', compact('tipeKamars'));
     }
 

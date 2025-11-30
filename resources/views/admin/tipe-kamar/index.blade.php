@@ -12,6 +12,17 @@
         </a>
     </div>
 
+    {{-- Filter and Search --}}
+    <div class="mb-6">
+        <form method="GET" action="{{ route('admin.tipe-kamar.index') }}">
+            <div class="flex gap-4">
+                <input type="text" name="search" placeholder="Cari nama tipe kamar..." class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" value="{{ request('search') }}">
+                <button type="submit" class="px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition">Cari</button>
+                <a href="{{ route('admin.tipe-kamar.index') }}" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition">Reset</a>
+            </div>
+        </form>
+    </div>
+
     @if(session('success'))
         <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">{{ session('success') }}</div>
     @endif

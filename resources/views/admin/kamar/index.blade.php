@@ -13,6 +13,32 @@
                     Add DataKamar
                 </a>
                 <h2 class="text-xl font-semibold text-gray-700 mb-4">Manajemen Kamar</h2>
+
+                {{-- Filter and Search --}}
+                <div class="mb-6">
+                    <form method="GET" action="{{ route('admin.kamar.index') }}">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <input type="text" name="nomor_kamar" placeholder="Cari nomor kamar..." class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" value="{{ request('nomor_kamar') }}">
+                            <select name="type" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <option value="">-- Semua Tipe --</option>
+                                @foreach($tipeKamars as $tipe)
+                                    <option value="{{ $tipe->nama_tipe }}" @selected(request('type') == $tipe->nama_tipe)>{{ $tipe->nama_tipe }}</option>
+                                @endforeach
+                            </select>
+                            <select name="status" class="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <option value="">-- Semua Status --</option>
+                                <option value="available" @selected(request('status') == 'available')>Tersedia</option>
+                                <option value="booked" @selected(request('status') == 'booked')>Dipesan</option>
+                                <option value="maintenance" @selected(request('status') == 'maintenance')>Pemeliharaan</option>
+                            </select>
+                            <div class="flex space-x-2">
+                                <button type="submit" class="w-full px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition">Filter</button>
+                                <a href="{{ route('admin.kamar.index') }}" class="w-full text-center px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition">Reset</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="min-h-[200px] bg-gray-50 rounded-md p-4">
                     @if($kamars->count() > 0)
                         <div class="overflow-x-auto">

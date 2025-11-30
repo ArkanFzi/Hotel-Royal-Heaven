@@ -15,6 +15,10 @@ class KamarController extends Controller
     {
         $query = Kamar::with('tipe');
 
+        if ($request->filled('nomor_kamar')) {
+            $query->where('nomor_kamar', 'like', '%'.$request->input('nomor_kamar').'%');
+        }
+
         if ($request->filled('type')) {
             $query->whereHas('tipe', function($q) use ($request){
                 $q->where('nama_tipe', 'like', '%'.$request->input('type').'%');
