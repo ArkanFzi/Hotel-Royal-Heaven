@@ -92,7 +92,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->group(function () {
     })->name('admin.calendar.index');
 
     // Profile Admin
-    Route::get('profile', [AdminProfileController::class, 'show'])->name('admin.profile');
+    Route::get('profile', [AdminProfileController::class, 'show'])->name('admin.profile.show');
+    Route::get('profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::put('profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
 });
 

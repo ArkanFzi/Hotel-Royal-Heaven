@@ -34,7 +34,7 @@
             <a href="{{ route('admin.profile.edit') }}" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
                 Edit Profil
             </a>
-            <a href="{{ route('admin.index') }}" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
+            <a href="{{ route('admin.dashboard.index') }}" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
                 Kembali
             </a>
         </div>
