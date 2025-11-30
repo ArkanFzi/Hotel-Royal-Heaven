@@ -88,18 +88,18 @@
                                                     <span class="text-gray-400 text-xs">Tidak ada foto</span>
                                                 @endif
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            <td class="px-6 py-4 max-w-xs">
                                                 @if($kamar->foto_detail)
                                                     @php
                                                         $detailPhotos = json_decode($kamar->foto_detail, true);
                                                     @endphp
                                                     @if(is_array($detailPhotos) && count($detailPhotos) > 0)
-                                                        <div class="flex space-x-1">
+                                                        <div class="flex flex-wrap gap-1">
                                                             @foreach(array_slice($detailPhotos, 0, 3) as $photo)
-                                                                <img src="{{ asset('storage/' . $photo) }}" alt="Foto Detail" class="w-8 h-8 object-cover rounded border">
+                                                                <img src="{{ asset('storage/' . $photo) }}" alt="Foto Detail" class="w-8 h-8 object-cover rounded border flex-shrink-0">
                                                             @endforeach
                                                             @if(count($detailPhotos) > 3)
-                                                                <span class="text-xs text-gray-500">+{{ count($detailPhotos) - 3 }}</span>
+                                                                <span class="text-xs text-gray-500 self-center">+{{ count($detailPhotos) - 3 }}</span>
                                                             @endif
                                                         </div>
                                                     @else

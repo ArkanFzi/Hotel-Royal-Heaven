@@ -1,29 +1,39 @@
 <div>
     {{-- Search and Filter Section --}}
     <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        {{-- Header --}}
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">Find Your Perfect Stay</h2>
+            {{-- Active Filters Count --}}
+            <div class="text-xs text-gray-600">
+                <span id="activeFiltersCount" class="hidden">0 active filters</span>
+            </div>
+        </div>
+
+        {{-- Primary Filters Row (Always Visible) --}}
+        <div class="flex flex-col sm:flex-row gap-3">
             {{-- Search Input --}}
-            <div class="lg:col-span-2">
-                <label for="search" class="block text-xs font-medium text-gray-700 mb-1">Cari Kamar</label>
+            <div class="flex-1">
+                <label for="search" class="block text-xs font-medium text-gray-700 mb-1">Search</label>
                 <div class="relative">
-                    <input type="text" wire:model.live.debounce.300ms="search" id="search"
-                           placeholder="Cari berdasarkan nomor kamar atau tipe..."
-                           class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                         </svg>
                     </div>
+                    <input type="text" wire:model.live.debounce.300ms="search" id="search"
+                           placeholder="Search by room name or type..."
+                           class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
                 </div>
             </div>
 
             {{-- Room Type Filter --}}
-            <div>
-                <label for="type" class="block text-xs font-medium text-gray-700 mb-1">Tipe Kamar</label>
+            <div class="sm:w-48">
+                <label for="type" class="block text-xs font-medium text-gray-700 mb-1">Room Type</label>
                 <div class="relative">
                     <select wire:model.live="type" id="type"
                             class="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white appearance-none">
-                        <option value="">Semua Tipe</option>
+                        <option value="">All Types</option>
                         @foreach($tipeKamars as $tipe)
                             <option value="{{ $tipe->id_tipe }}">{{ $tipe->nama_tipe }}</option>
                         @endforeach
@@ -36,17 +46,17 @@
                 </div>
             </div>
 
-            {{-- Availability Filter --}}
-            <div>
-                <label for="facilities" class="block text-xs font-medium text-gray-700 mb-1">Fasilitas</label>
+            {{-- Sort Filter --}}
+            <div class="sm:w-48">
+                <label for="sort" class="block text-xs font-medium text-gray-700 mb-1">Sort By</label>
                 <div class="relative">
-                    <select wire:model.live="facilities" id="facilities"
+                    <select wire:model.live="sort" id="sort"
                             class="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white appearance-none">
-                        <option value="">Semua Fasilitas</option>
-                        <option value="wifi">WiFi</option>
-                        <option value="ac">Air Conditioning</option>
-                        <option value="tv">TV</option>
-                        <option value="bathroom">Private Bathroom</option>
+                        <option value="recommendation">Recommendation</option>
+                        <option value="price_low">Price: Low to High</option>
+                        <option value="price_high">Price: High to Low</option>
+                        <option value="rating">Top Rated</option>
+                        <option value="newest">Newest</option>
                     </select>
                     <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,65 +67,130 @@
             </div>
         </div>
 
-        {{-- Price Range and Sort --}}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-            <div>
-                <label for="min_price" class="block text-xs font-medium text-gray-700 mb-1">Harga Min</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-gray-400 font-medium text-sm">Rp</span>
+        {{-- Expand/Collapse Toggle --}}
+        <div class="flex justify-center mt-3">
+            <button type="button" id="toggleFilters" class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200">
+                <span id="toggleText">Show More Filters</span>
+                <svg id="toggleIcon" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+        </div>
+
+        {{-- Advanced Filters (Collapsible) --}}
+        <div id="advancedFilters" class="overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0">
+            <div class="space-y-3 pt-3 border-t border-gray-100">
+                {{-- Price Range Filters --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label for="min_price" class="block text-xs font-medium text-gray-700 mb-1">Min Price</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-400 font-medium text-sm">Rp</span>
+                            </div>
+                            <input type="number" wire:model.live.debounce.300ms="min_price" id="min_price"
+                                   placeholder="0"
+                                   class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
+                        </div>
                     </div>
-                    <input type="number" wire:model.live.debounce.300ms="min_price" id="min_price"
-                           placeholder="0"
-                           class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
-                </div>
-            </div>
-            <div>
-                <label for="max_price" class="block text-xs font-medium text-gray-700 mb-1">Harga Max</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-gray-400 font-medium text-sm">Rp</span>
+                    <div>
+                        <label for="max_price" class="block text-xs font-medium text-gray-700 mb-1">Max Price</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-400 font-medium text-sm">Rp</span>
+                            </div>
+                            <input type="number" wire:model.live.debounce.300ms="max_price" id="max_price"
+                                   placeholder="9999999"
+                                   class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
+                        </div>
                     </div>
-                    <input type="number" wire:model.live.debounce.300ms="max_price" id="max_price"
-                           placeholder="9999999"
-                           class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
                 </div>
-            </div>
-            <div>
-                <label for="sort" class="block text-xs font-medium text-gray-700 mb-1">Urutkan</label>
-                <div class="relative">
-                    <select wire:model.live="sort" id="sort"
-                            class="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white appearance-none">
-                        <option value="recommendation">Rekomendasi</option>
-                        <option value="price_low">Harga Rendah</option>
-                        <option value="price_high">Harga Tinggi</option>
-                        <option value="rating">Rating Tertinggi</option>
-                        <option value="newest">Terbaru</option>
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
+
+                {{-- Date Range Filters --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label for="check_in" class="block text-xs font-medium text-gray-700 mb-1">Check-in Date</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <input type="date" wire:model.live.debounce.300ms="check_in" id="check_in"
+                                   min="{{ date('Y-m-d') }}"
+                                   class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="check_out" class="block text-xs font-medium text-gray-700 mb-1">Check-out Date</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <input type="date" wire:model.live.debounce.300ms="check_out" id="check_out"
+                                   min="{{ date('Y-m-d', strtotime('+1 day')) }}"
+                                   class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Capacity and Facilities Filters --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label for="capacity" class="block text-xs font-medium text-gray-700 mb-1">Minimum Capacity</label>
+                        <div class="relative">
+                            <select wire:model.live="capacity" id="capacity"
+                                    class="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white appearance-none">
+                                <option value="">Any Capacity</option>
+                                <option value="1">1 Person</option>
+                                <option value="2">2 People</option>
+                                <option value="3">3 People</option>
+                                <option value="4">4 People</option>
+                                <option value="5">5+ People</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="facilities" class="block text-xs font-medium text-gray-700 mb-1">Facilities</label>
+                        <div class="relative">
+                            <select wire:model.live="facilities" id="facilities"
+                                    class="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white appearance-none">
+                                <option value="">All Facilities</option>
+                                <option value="wifi">WiFi</option>
+                                <option value="ac">Air Conditioning</option>
+                                <option value="tv">TV</option>
+                                <option value="bathroom">Private Bathroom</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         {{-- Action Buttons --}}
-        <div class="flex flex-col sm:flex-row gap-3 pt-3 border-t border-gray-100 mt-3">
+        <div class="flex flex-col sm:flex-row gap-2 pt-3 border-t border-gray-100">
             <button type="button"
-                    wire:click="$set('search', ''); $set('type', ''); $set('facilities', ''); $set('min_price', ''); $set('max_price', ''); $set('sort', 'recommendation')"
-                    class="inline-flex items-center justify-center px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-md transition-colors duration-200">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
+                    wire:click="$set('search', ''); $set('type', ''); $set('facilities', ''); $set('min_price', ''); $set('max_price', ''); $set('check_in', ''); $set('check_out', ''); $set('capacity', ''); $set('sort', 'recommendation')"
+                    class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded transition-all duration-200">
                 Reset
             </button>
-            @if($kamars->total() > 0)
-                <div class="text-xs text-gray-600 flex items-center ml-auto">
-                    <span>{{ $kamars->total() }} hasil ditemukan</span>
-                </div>
-            @endif
+
+            {{-- Results Count --}}
+            <div class="flex items-center text-xs text-gray-600 ml-auto">
+                <span>{{ $kamars->total() }} results found</span>
+            </div>
         </div>
     </div>
 
@@ -297,6 +372,49 @@
     </div>
 
     <script>
+        let isExpanded = false;
+
+        function toggleFilters() {
+            const advancedFilters = document.getElementById('advancedFilters');
+            const toggleText = document.getElementById('toggleText');
+            const toggleIcon = document.getElementById('toggleIcon');
+
+            isExpanded = !isExpanded;
+
+            if (isExpanded) {
+                advancedFilters.style.maxHeight = advancedFilters.scrollHeight + 'px';
+                advancedFilters.style.opacity = '1';
+                toggleText.textContent = 'Show Less Filters';
+                toggleIcon.style.transform = 'rotate(180deg)';
+            } else {
+                advancedFilters.style.maxHeight = '0px';
+                advancedFilters.style.opacity = '0';
+                toggleText.textContent = 'Show More Filters';
+                toggleIcon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function updateActiveFiltersCount() {
+            const inputs = document.querySelectorAll('#search, #type, #sort, #min_price, #max_price, #check_in, #check_out, #capacity, #facilities');
+            let activeCount = 0;
+
+            inputs.forEach(input => {
+                if (input.type === 'text' || input.type === 'number' || input.type === 'date') {
+                    if (input.value.trim() !== '') activeCount++;
+                } else if (input.tagName === 'SELECT') {
+                    if (input.selectedIndex > 0) activeCount++;
+                }
+            });
+
+            const counter = document.getElementById('activeFiltersCount');
+            if (activeCount > 0) {
+                counter.textContent = `${activeCount} active filter${activeCount > 1 ? 's' : ''}`;
+                counter.classList.remove('hidden');
+            } else {
+                counter.classList.add('hidden');
+            }
+        }
+
         let selectedKamarId = null;
 
         function openBookingModal(kamarId) {
@@ -335,8 +453,22 @@
         }
 
         // Event listeners
-        document.getElementById('closeModalBtn').addEventListener('click', closeBookingModal);
-        document.getElementById('modalBackdrop').addEventListener('click', closeBookingModal);
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.getElementById('toggleFilters');
+            if (toggleButton) {
+                toggleButton.addEventListener('click', toggleFilters);
+            }
+
+            const inputs = document.querySelectorAll('#search, #type, #sort, #min_price, #max_price, #check_in, #check_out, #capacity, #facilities');
+            inputs.forEach(input => {
+                input.addEventListener('change', updateActiveFiltersCount);
+                input.addEventListener('input', updateActiveFiltersCount);
+            });
+            updateActiveFiltersCount(); // Initial count
+
+            document.getElementById('closeModalBtn').addEventListener('click', closeBookingModal);
+            document.getElementById('modalBackdrop').addEventListener('click', closeBookingModal);
+        });
 
         // Listen for booking success event
         window.addEventListener('booking-success', function() {

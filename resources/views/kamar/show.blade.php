@@ -61,45 +61,29 @@ karena sudah ada di 'layouts.app' --}}
             <div class="lg:col-span-2 space-y-8">
                 <!-- Room Image Gallery -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div id="image-carousel" class="relative">
+                    <!-- Main Image -->
+                    @if($kamar->foto_kamar)
                         <div class="aspect-w-16 aspect-h-9">
-                            @php
-                                $images = [];
-                                if ($kamar->foto_kamar) {
-                                    $images[] = $kamar->foto_kamar;
-                                }
-                                if ($kamar->foto_detail && is_array($kamar->foto_detail)) {
-                                    $images = array_merge($images, $kamar->foto_detail);
-                                }
-                            @endphp
-                            @foreach($images as $index => $image)
-                                <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}" data-slide="{{ $index }}">
-                                    <img src="{{ asset('storage/' . $image) }}" alt="{{ $kamar->nomor_kamar }} - Image {{ $index + 1 }}" class="w-full h-96 lg:h-[500px] object-cover">
-                                </div>
-                            @endforeach
+                            <img id="mainImage" src="{{ asset('storage/' . $kamar->foto_kamar) }}" alt="{{ $kamar->nomor_kamar }} - Main Image" class="w-full h-96 lg:h-[500px] object-cover cursor-pointer" onclick="document.getElementById('mainImage').src = this.src">
                         </div>
+                    @endif
 
-                        <!-- Carousel Indicators -->
-                        @if(count($images) > 1)
-                            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                                @for($i = 0; $i < count($images); $i++)
-                                    <button class="carousel-indicator w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-75 transition-all {{ $i === 0 ? 'bg-opacity-100' : '' }}" data-slide="{{ $i }}"></button>
-                                @endfor
+                    <!-- Detail Images Thumbnails -->
+                    @php
+                        $detailPhotos = json_decode($kamar->foto_detail, true);
+                    @endphp
+                    @if($detailPhotos && is_array($detailPhotos) && count($detailPhotos) > 0)
+                        <div class="p-6 border-t border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Foto Detail Kamar</h3>
+                            <div class="grid grid-cols-3 gap-4">
+                                @foreach($detailPhotos as $index => $detailImage)
+                                    <div class="aspect-w-1 aspect-h-1">
+                                        <img id="detailImage{{ $index }}" src="{{ asset('storage/' . $detailImage) }}" alt="{{ $kamar->nomor_kamar }} - Detail {{ $index + 1 }}" class="w-full h-24 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity" onclick="document.getElementById('mainImage').src = this.src">
+                                    </div>
+                                @endforeach
                             </div>
-
-                            <!-- Navigation Arrows -->
-                            <button class="carousel-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full transition-all">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                </svg>
-                            </button>
-                            <button class="carousel-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full transition-all">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                        @endif
-                    </div>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Room Information -->
@@ -367,7 +351,7 @@ karena sudah ada di 'layouts.app' --}}
                         @auth
                             @if(auth()->user()->role === 'member')
                                 <button
-                                   onclick="openBookingModal()"
+                                   onclick="openBookingModal({{ $kamar->id_kamar }})"
                                    class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
@@ -375,7 +359,7 @@ karena sudah ada di 'layouts.app' --}}
                                     Pesan Sekarang
                                 </button>
                         @else
-                            <button onclick="openBookingModal()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
+                            <button onclick="openBookingModal({{ $kamar->id_kamar }})" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10m0 0l-2-2m2 2l2-2m6-6v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6a2 2 0 012-2h8a2 2 0 012 2z"></path>
                                 </svg>
@@ -426,6 +410,8 @@ karena sudah ada di 'layouts.app' --}}
             </div>
         </div>
     </div>
+
+
 
     <!-- Booking Modal -->
     <div id="bookingModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -509,235 +495,93 @@ karena sudah ada di 'layouts.app' --}}
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 
-    <style>
-        .carousel-slide {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+<script>
+    function openBookingModal(kamarId) {
+        const modal = document.getElementById('bookingModal');
+        const modalPanel = document.getElementById('modalPanel');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        // Trigger animation
+        setTimeout(() => {
+            modalPanel.classList.remove('scale-95', 'opacity-0');
+            modalPanel.classList.add('scale-100', 'opacity-100');
+        }, 10);
+
+        // Update Livewire component with selected room
+        if (window.livewire) {
+            window.livewire.find('booking-form').call('setSelectedRoom', kamarId);
         }
-        .carousel-slide.active {
-            display: block;
-            opacity: 1;
-        }
-    </style>
+    }
 
-    <script>
-        function openBookingModal() {
-            const modal = document.getElementById('bookingModal');
-            const modalPanel = document.getElementById('modalPanel');
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+    function closeBookingModal() {
+        const modal = document.getElementById('bookingModal');
+        const modalPanel = document.getElementById('modalPanel');
 
-            // Trigger animation
-            setTimeout(() => {
-                modalPanel.classList.remove('scale-95', 'opacity-0');
-                modalPanel.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
+        // Trigger close animation
+        modalPanel.classList.remove('scale-100', 'opacity-100');
+        modalPanel.classList.add('scale-95', 'opacity-0');
 
-        function scrollToRoomDetails() {
-            const roomDetailsSection = document.querySelector('.min-h-screen.bg-gray-50');
-            if (roomDetailsSection) {
-                roomDetailsSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        }
+        // Hide modal after animation
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }, 300);
+    }
 
-        function closeBookingModal() {
-            const modal = document.getElementById('bookingModal');
-            const modalPanel = document.getElementById('modalPanel');
+    // Event listeners
+    document.getElementById('closeModalBtn').addEventListener('click', closeBookingModal);
+    document.getElementById('modalBackdrop').addEventListener('click', closeBookingModal);
 
-            // Trigger close animation
-            modalPanel.classList.remove('scale-100', 'opacity-100');
-            modalPanel.classList.add('scale-95', 'opacity-0');
+    // Listen for booking success event
+    window.addEventListener('booking-success', function() {
+        closeBookingModal();
+    });
 
-            // Hide modal after animation
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            }, 300);
-        }
+    // Star rating functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingInputs = document.querySelectorAll('input[name="rating"]');
+        const starLabels = document.querySelectorAll('label[for^="rating-"]');
 
-        // Event listeners
-        document.getElementById('closeModalBtn').addEventListener('click', closeBookingModal);
-        document.getElementById('modalBackdrop').addEventListener('click', closeBookingModal);
+        function updateStars(selectedValue) {
+            starLabels.forEach((label, index) => {
+                const starValue = index + 1;
+                const starSvg = label.querySelector('svg');
 
-        // Listen for booking success event
-        window.addEventListener('booking-success', function() {
-            closeBookingModal();
-        });
-
-        // Image Carousel Functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const carousel = document.getElementById('image-carousel');
-            if (!carousel) return;
-
-            const slides = carousel.querySelectorAll('.carousel-slide');
-            const indicators = carousel.querySelectorAll('.carousel-indicator');
-            const prevBtn = carousel.querySelector('.carousel-prev');
-            const nextBtn = carousel.querySelector('.carousel-next');
-
-            if (slides.length <= 1) return;
-
-            let currentSlide = 0;
-            let autoSlideInterval;
-
-            function showSlide(index) {
-                slides.forEach(slide => slide.classList.remove('active'));
-                indicators.forEach(indicator => indicator.classList.remove('bg-opacity-100'));
-
-                slides[index].classList.add('active');
-                indicators[index].classList.add('bg-opacity-100');
-                currentSlide = index;
-            }
-
-            function nextSlide() {
-                const nextIndex = (currentSlide + 1) % slides.length;
-                showSlide(nextIndex);
-            }
-
-            function prevSlide() {
-                const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
-                showSlide(prevIndex);
-            }
-
-            function startAutoSlide() {
-                autoSlideInterval = setInterval(nextSlide, 5000); // Auto slide every 5 seconds
-            }
-
-            function stopAutoSlide() {
-                clearInterval(autoSlideInterval);
-            }
-
-            // Event listeners for controls
-            if (prevBtn) {
-                prevBtn.addEventListener('click', function() {
-                    prevSlide();
-                    stopAutoSlide();
-                    startAutoSlide();
-                });
-            }
-
-            if (nextBtn) {
-                nextBtn.addEventListener('click', function() {
-                    nextSlide();
-                    stopAutoSlide();
-                    startAutoSlide();
-                });
-            }
-
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', function() {
-                    showSlide(index);
-                    stopAutoSlide();
-                    startAutoSlide();
-                });
+                if (starValue <= selectedValue) {
+                    // Selected stars - yellow
+                    starSvg.classList.remove('text-gray-300');
+                    starSvg.classList.add('text-yellow-400');
+                } else {
+                    // Unselected stars - gray
+                    starSvg.classList.remove('text-yellow-400');
+                    starSvg.classList.add('text-gray-300');
+                }
             });
+        }
 
-            // Pause auto-slide on hover
-            carousel.addEventListener('mouseenter', stopAutoSlide);
-            carousel.addEventListener('mouseleave', startAutoSlide);
-
-        // Start auto-slide
-        startAutoSlide();
-        });
-
-        // Wishlist functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const wishlistBtn = document.getElementById('wishlist-btn');
-            if (!wishlistBtn) return;
-
-            wishlistBtn.addEventListener('click', function() {
-                const kamarId = this.getAttribute('data-kamar-id');
-                const inWishlist = this.getAttribute('data-in-wishlist') === 'true';
-
-                // Disable button during request
-                this.disabled = true;
-                this.innerHTML = '<svg class="w-5 h-5 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Loading...';
-
-                const url = inWishlist ? `{{ route('member.wishlist.destroy', ':id') }}`.replace(':id', kamarId) : `{{ route('member.wishlist.store') }}`;
-
-                fetch(url, {
-                    method: inWishlist ? 'DELETE' : 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: inWishlist ? null : JSON.stringify({
-                        id_kamar: kamarId
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const newInWishlist = !inWishlist;
-                        this.setAttribute('data-in-wishlist', newInWishlist ? 'true' : 'false');
-                        this.className = `w-full ${newInWishlist ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-500 hover:bg-gray-600'} text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center mb-4`;
-                        this.innerHTML = `
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                            <span id="wishlist-text">${newInWishlist ? 'Hapus dari Wishlist' : 'Tambah ke Wishlist'}</span>
-                        `;
-
-                        // Show success message
-                        showNotification(data.message, 'success');
-                    } else {
-                        showNotification(data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Terjadi kesalahan. Silakan coba lagi.', 'error');
-                })
-                .finally(() => {
-                    // Re-enable button
-                    wishlistBtn.disabled = false;
-                    const currentInWishlist = wishlistBtn.getAttribute('data-in-wishlist') === 'true';
-                    wishlistBtn.innerHTML = `
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                        <span id="wishlist-text">${currentInWishlist ? 'Hapus dari Wishlist' : 'Tambah ke Wishlist'}</span>
-                    `;
-                });
+        // Handle radio button changes
+        ratingInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                updateStars(parseInt(this.value));
             });
         });
 
-        function showNotification(message, type) {
-            // Remove existing notifications
-            const existingNotifications = document.querySelectorAll('.notification');
-            existingNotifications.forEach(notification => notification.remove());
+        // Handle label clicks for better UX
+        starLabels.forEach((label, index) => {
+            label.addEventListener('click', function() {
+                const value = index + 1;
+                const radioInput = document.getElementById(`rating-${value}`);
+                radioInput.checked = true;
+                updateStars(value);
+            });
+        });
 
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.className = `notification fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
-            notification.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
-            notification.textContent = message;
+        // Initialize with no stars selected
+        updateStars(0);
+    });
+</script>
 
-            // Add to page
-            document.body.appendChild(notification);
-
-            // Animate in
-            setTimeout(() => {
-                notification.classList.remove('translate-x-full');
-            }, 100);
-
-            // Auto remove after 3 seconds
-            setTimeout(() => {
-                notification.classList.add('translate-x-full');
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 3000);
-        }
-    </script>
-</div>
 @endsection

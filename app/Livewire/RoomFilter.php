@@ -176,7 +176,7 @@ class RoomFilter extends Component
                 break;
         }
 
-        $kamars = $query->paginate(6);
+        $kamars = $query->paginate(10);
         $tipeKamars = TipeKamar::whereHas('kamars', function ($q) {
             $q->where('status_ketersediaan', 'available');
         })->get();

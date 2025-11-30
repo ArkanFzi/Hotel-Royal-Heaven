@@ -11,7 +11,7 @@ class PemesananController extends Controller
     // List all pemesanan (admin only)
     public function index()
     {
-        $pemesanan = Pemesanan::with(['user', 'kamar'])->latest('tgl_pemesanan')->paginate(15);
+        $pemesanan = Pemesanan::with(['user', 'kamar'])->latest('tgl_pemesanan')->paginate(6);
         return view('admin.pemesanan.index', compact('pemesanan'));
     }
 

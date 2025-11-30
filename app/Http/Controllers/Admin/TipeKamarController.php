@@ -16,7 +16,7 @@ class TipeKamarController extends Controller
             $query->where('nama_tipe', 'like', '%'.$request->input('search').'%');
         }
 
-        $tipeKamars = $query->paginate(10);
+        $tipeKamars = $query->paginate(6);
         return view('admin.tipe-kamar.index', compact('tipeKamars'));
     }
 

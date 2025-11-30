@@ -29,7 +29,7 @@ class KamarController extends Controller
             $query->where('status_ketersediaan', $request->input('status'));
         }
 
-        $kamars = $query->paginate(15);
+        $kamars = $query->paginate(6);
         $tipeKamars = TipeKamar::all();
 
         return view('admin.kamar.index', compact('kamars', 'tipeKamars'));
@@ -57,12 +57,17 @@ class KamarController extends Controller
     // Store kamar (admin only)
     public function store(Request $request)
     {
+        $request->merge([
+            'status_ketersediaan' => $request->input('status_ketersediaan', 'available')
+        ]);
+
         $data = $request->validate([
             'id_tipe' => 'required|exists:tipe_kamar,id_tipe',
             'deskripsi' => 'nullable|string|max:500',
             'status_ketersediaan' => 'required|in:available,booked,maintenance',
             'foto_kamar' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             'foto_detail.*' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_detail' => 'nullable|array|max:3',
         ]);
 
         // Generate auto room number
@@ -113,6 +118,7 @@ class KamarController extends Controller
             'status_ketersediaan' => 'required|in:available,booked,maintenance',
             'foto_kamar' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
             'foto_detail.*' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_detail' => 'nullable|array|max:3',
         ]); // <-- SINTAKS ARRAY DIPERBAIKI DI SINI
 
         // Handle foto_kamar upload

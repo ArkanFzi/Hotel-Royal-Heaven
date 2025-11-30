@@ -107,7 +107,7 @@ class KamarPublikController extends Controller // <<< Perubahan NAMA CLASS
                 break;
         }
 
-        $kamars = $query->paginate(12)->withQueryString();
+        $kamars = $query->paginate(10)->withQueryString();
         $tipeKamars = \App\Models\TipeKamar::whereHas('kamars', function ($q) {
             $q->where('status_ketersediaan', 'available');
         })->get();

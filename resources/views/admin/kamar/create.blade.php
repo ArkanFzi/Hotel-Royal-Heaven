@@ -41,25 +41,7 @@
                     @enderror
                 </div>
 
-                <div>
-                    <label for="status_ketersediaan" class="block text-sm font-medium text-gray-700 mb-2">
-                        Status Ketersediaan
-                    </label>
-                    <select 
-                        id="status_ketersediaan" 
-                        name="status_ketersediaan" 
-                        required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent @error('status_ketersediaan') border-red-500 @enderror"
-                    >
-                        <option value="">-- Pilih Status --</option>
-                        <option value="available" @selected(old('status_ketersediaan') == 'available')>Tersedia</option>
-                        <option value="booked" @selected(old('status_ketersediaan') == 'booked')>Dipesan</option>
-                        <option value="maintenance" @selected(old('status_ketersediaan') == 'maintenance')>Pemeliharaan</option>
-                    </select>
-                    @error('status_ketersediaan')
-                        <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
+
 
                 <div>
                     <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">

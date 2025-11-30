@@ -18,9 +18,10 @@
                     <label for="selectedKamarId" class="block text-sm font-medium text-gray-700 mb-2">
                         Kamar yang Diinginkan
                     </label>
-                    <select 
-                        wire:model.live="selectedKamarId" 
-                        id="selectedKamarId" 
+                    <select
+                        wire:model.live="selectedKamarId"
+                        wire:key="select-kamar-{{ $selectedKamarId }}"
+                        id="selectedKamarId"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     >
                         <option value="">-- Pilih Kamar --</option>
@@ -121,9 +122,6 @@
                 <button type="submit" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                     Lanjutkan Pemesanan
                 </button>
-                <a href="{{ route('member.kamar.index') }}" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 text-center">
-                    Batal
-                </a>
             </div>
         </form>
     @endif
