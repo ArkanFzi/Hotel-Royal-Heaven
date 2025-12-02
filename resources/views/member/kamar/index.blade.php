@@ -61,6 +61,25 @@
                         <span class="text-sm font-bold text-gray-900">Rp {{ number_format($kamar->tipe->harga_dasar ?? 0, 0, ',', '.') }}</span>
                     </div>
 
+                    {{-- Wishlist Button --}}
+                    @auth
+                        @if(auth()->user()->role === 'member')
+                            @php
+                                $inWishlist = $kamar->wishlists()->where('id_user', auth()->id())->exists();
+                            @endphp
+                            <button
+                                id="wishlist-btn-{{ $kamar->id_kamar }}"
+                                data-in-wishlist="{{ $inWishlist ? 'true' : 'false' }}"
+                                data-kamar-id="{{ $kamar->id_kamar }}"
+                                class="w-full mb-2 {{ $inWishlist ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-500 hover:bg-gray-600' }} text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                                <span id="wishlist-text-{{ $kamar->id_kamar }}">{{ $inWishlist ? 'Hapus dari Wishlist' : 'Tambah ke Wishlist' }}</span>
+                            </button>
+                        @endif
+                    @endauth
+
                     <div class="grid grid-cols-2 gap-2 mt-auto">
                         <a href="{{ route('member.kamar.show', $kamar) }}" class="px-2 py-2 text-center text-xs font-semibold text-gray-700 border border-gray-300 rounded-lg hover:bg-white hover:border-gray-400 transition">
                             Detail
@@ -191,6 +210,115 @@
     // Listen for booking success event
     window.addEventListener('booking-success', function() {
         closeBookingModal();
+    });
+
+    // Wishlist functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle all wishlist buttons
+        document.querySelectorAll('[id^="wishlist-btn-"]').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                const kamarId = event.target.getAttribute('data-kamar-id');
+                const isInWishlist = event.target.getAttribute('data-in-wishlist') === 'true';
+                const wishlistText = document.getElementById('wishlist-text-' + kamarId);
+
+                // Disable button during request
+                this.disabled = true;
+                this.classList.add('opacity-50', 'cursor-not-allowed');
+
+                if (isInWishlist) {
+                    // Remove from wishlist
+                    fetch(`/member/wishlist/${kamarId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.setAttribute('data-in-wishlist', 'false');
+                            this.classList.remove('bg-red-500', 'hover:bg-red-600');
+                            this.classList.add('bg-gray-500', 'hover:bg-gray-600');
+                            wishlistText.textContent = 'Tambah ke Wishlist';
+                            showNotification('Kamar berhasil dihapus dari wishlist', 'success');
+                        } else {
+                            showNotification(data.message || 'Gagal menghapus dari wishlist', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Terjadi kesalahan saat menghapus dari wishlist', 'error');
+                    })
+                    .finally(() => {
+                        this.disabled = false;
+                        this.classList.remove('opacity-50', 'cursor-not-allowed');
+                    });
+                } else {
+                    // Add to wishlist
+                    const formData = new FormData();
+                    formData.append('id_kamar', kamarId);
+
+                    fetch('/member/wishlist', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.setAttribute('data-in-wishlist', 'true');
+                            this.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                            this.classList.add('bg-red-500', 'hover:bg-red-600');
+                            wishlistText.textContent = 'Hapus dari Wishlist';
+                            showNotification('Kamar berhasil ditambahkan ke wishlist', 'success');
+                        } else {
+                            showNotification(data.message || 'Gagal menambahkan ke wishlist', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Terjadi kesalahan saat menambahkan ke wishlist', 'error');
+                    })
+                    .finally(() => {
+                        this.disabled = false;
+                        this.classList.remove('opacity-50', 'cursor-not-allowed');
+                    });
+                }
+            });
+        });
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
+
+            if (type === 'success') {
+                notification.classList.add('bg-green-500', 'text-white');
+            } else {
+                notification.classList.add('bg-red-500', 'text-white');
+            }
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
     });
 </script>
 @endsection

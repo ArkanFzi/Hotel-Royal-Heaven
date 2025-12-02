@@ -582,6 +582,115 @@ karena sudah ada di 'layouts.app' --}}
         // Initialize with no stars selected
         updateStars(0);
     });
+
+    // Wishlist functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const wishlistBtn = document.getElementById('wishlist-btn');
+        if (wishlistBtn) {
+            wishlistBtn.addEventListener('click', function(event) {
+                const kamarId = event.target.getAttribute('data-kamar-id');
+                const isInWishlist = event.target.getAttribute('data-in-wishlist') === 'true';
+                const wishlistText = document.getElementById('wishlist-text');
+
+                // Disable button during request
+                this.disabled = true;
+                this.classList.add('opacity-50', 'cursor-not-allowed');
+
+                if (isInWishlist) {
+                    // Remove from wishlist
+                    fetch(`/member/wishlist/${kamarId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.setAttribute('data-in-wishlist', 'false');
+                            this.classList.remove('bg-red-500', 'hover:bg-red-600');
+                            this.classList.add('bg-gray-500', 'hover:bg-gray-600');
+                            wishlistText.textContent = 'Tambah ke Wishlist';
+                            showNotification('Kamar berhasil dihapus dari wishlist', 'success');
+                        } else {
+                            showNotification(data.message || 'Gagal menghapus dari wishlist', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Terjadi kesalahan saat menghapus dari wishlist', 'error');
+                    })
+                    .finally(() => {
+                        this.disabled = false;
+                        this.classList.remove('opacity-50', 'cursor-not-allowed');
+                    });
+                } else {
+                    // Add to wishlist
+                    const formData = new FormData();
+                    formData.append('id_kamar', kamarId);
+
+                    fetch('/member/wishlist', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.setAttribute('data-in-wishlist', 'true');
+                            this.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                            this.classList.add('bg-red-500', 'hover:bg-red-600');
+                            wishlistText.textContent = 'Hapus dari Wishlist';
+                            showNotification('Kamar berhasil ditambahkan ke wishlist', 'success');
+                        } else {
+                            showNotification(data.message || 'Gagal menambahkan ke wishlist', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Terjadi kesalahan saat menambahkan ke wishlist', 'error');
+                    })
+                    .finally(() => {
+                        this.disabled = false;
+                        this.classList.remove('opacity-50', 'cursor-not-allowed');
+                    });
+                }
+            });
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
+
+            if (type === 'success') {
+                notification.classList.add('bg-green-500', 'text-white');
+            } else {
+                notification.classList.add('bg-red-500', 'text-white');
+            }
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    });
 </script>
 
 @endsection
